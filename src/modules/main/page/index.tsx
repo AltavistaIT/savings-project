@@ -1,5 +1,4 @@
-import { Table, TableBody, TableHeader, TableRow, TableHead, TableCell } from "@/components/ui/table";
-import { generalView } from "@/core/static-data/general-view";
+import GeneralBudgetTable from "@/components/tables/general-budget-table";
 
 export const MainPage = () => {
   return (
@@ -9,25 +8,7 @@ export const MainPage = () => {
 
         </div>
         <div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Vista General</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {
-                generalView.map((item, index) => {
-                  return (
-                    <TableRow>
-                      <TableCell className="font-medium">{item.name}</TableCell>
-                      <TableCell className="font-medium">{item.value}</TableCell>
-                    </TableRow>
-                  )
-                })
-              }
-            </TableBody>
-          </Table>
+          <GeneralBudgetTable />
         </div>
       </div>
     </div>

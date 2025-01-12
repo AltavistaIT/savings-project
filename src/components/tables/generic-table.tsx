@@ -1,32 +1,44 @@
 import { Table, TableBody, TableHeader, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { ReactNode } from "react";
 
-interface GenericTableProps {
-  title: string
-  data: any
+export type Column<T> = {
+  header: string,
+  accesor: keyof T | ((row: T) => React.ReactNode)
 }
 
-export default function GenericTable({ title, data }: GenericTableProps) {
+type GenericTableProps<T> = {
+  columns: Column<T>[];
+  data: T[];
+  classname?: string
+}
+
+export default function GenericTable<T extends Record<string, ReactNode>>({ columns, data, classname }: GenericTableProps<T>) {
   return (
-    <>
+    <div className={classname}>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">{title}</TableHead>
+            {
+              columns.map((column, index) => (
+                <TableHead key={index}>{column.header}</TableHead>
+              ))
+            }
           </TableRow>
         </TableHeader>
         <TableBody>
           {
-            data.map((item, index) => {
-              return (
-                <TableRow>
-                  <TableCell className="font-medium">{item.name}</TableCell>
-                  <TableCell className="font-medium">{item.value}</TableCell>
-                </TableRow>
-              )
-            })
+            data.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
+                {
+                  columns.map((column, columnIndex) => (
+                    <TableCell key={columnIndex}>{typeof column.accesor === "function" ? column.accesor(row) : row[column.accesor]}</TableCell>
+                  ))
+                }
+              </TableRow>
+            ))
           }
         </TableBody>
       </Table>
-    </>
+    </div>
   )
 }

@@ -1,4 +1,13 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Home } from "lucide-react";
+
+const items = [
+  {
+    title: "Home",
+    href: "/",
+    icon: Home
+  }
+]
 
 export default function MainSidebar() {
   return (
@@ -7,7 +16,24 @@ export default function MainSidebar() {
         <h2>Financial Dashboard</h2>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup></SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {
+                items.map((item, index) => (
+                  <SidebarMenuItem key={index}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.href}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))
+              }
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter></SidebarFooter>
     </Sidebar>

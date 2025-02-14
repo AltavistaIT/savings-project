@@ -1,5 +1,4 @@
 import GenericTable, { Column } from "./generic-table";
-import { generalView } from "@/core/static-data/general-view";
 
 type GeneralBudgetItem = {
   id: string,
@@ -26,29 +25,29 @@ const generalBudgetData: GeneralBudgetItem[] = [
     category: "Ahorros",
     percentage: 20,
     amount: 200
-  }
+  },
 ]
 
 const columns: Column<GeneralBudgetItem>[] = [
   {
     header: "Category",
-    accesor: "category"
+    accessor: "category",
   },
   {
     header: "Percentage",
-    accesor: "percentage"
+    accessor: "percentage"
   },
   {
     header: "Amount",
-    accesor: "amount"
-  }
+    accessor: "amount"
+  },
 ]
 
 
 export default function GeneralBudgetTable() {
   return (
     <>
-      <GenericTable columns={columns} data={generalBudgetData} />
+      <GenericTable title="General Budget" columns={columns} data={generalBudgetData} />
     </>
   );
 }

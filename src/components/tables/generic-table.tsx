@@ -5,6 +5,8 @@ import { Table, TableBody, TableHeader, TableRow, TableHead, TableCell } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReactNode, useEffect, useState } from "react";
 import TableCellInput from "./table-cell-input";
+import { Button } from "@/components/ui/button"
+import { GripVertical, Plus } from "lucide-react";
 
 export type Column<T> = {
   header: string,
@@ -43,6 +45,7 @@ export default function GenericTable<T extends Record<string, ReactNode>>({ colu
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead></TableHead>
               {
                 columns.map((column, index) => (
                   <TableHead key={index}>{column.header}</TableHead>
@@ -54,6 +57,9 @@ export default function GenericTable<T extends Record<string, ReactNode>>({ colu
             {
               editableData.map((row, rowIndex) => (
                 <TableRow key={rowIndex}>
+                  <TableCell>
+                    <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
+                  </TableCell>
                   {
                     columns.map((column, columnIndex) => (
                       <TableCell key={columnIndex}>
@@ -64,6 +70,13 @@ export default function GenericTable<T extends Record<string, ReactNode>>({ colu
                 </TableRow>
               ))
             }
+            <TableRow>
+              <TableCell colSpan={4}>
+                <Button variant="outline" className="w-full border-dashed">
+                  <Plus className="h-4 w-4 mr-2" /> Add Row
+                </Button>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </CardContent>

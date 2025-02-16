@@ -1,16 +1,17 @@
 "use client"
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Table, TableBody, TableHeader, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ReactNode, useEffect, useState } from "react";
-import TableCellInput from "./table-cell-input";
+import { ReactNode } from "react";
 import { Button } from "@/components/ui/button"
 import { GripVertical, Plus } from "lucide-react";
+import { RowActionsMenu } from "../dropdown-menus/row-actions-menu";
+import { useDialogFormStore } from "@/hooks/store/generic-dialog-form-store";
+import * as z from "zod";
 
 export type Column<T> = {
   header: string,
-  accessor: keyof T | ((row: T, onChange: (value: any) => void) => React.ReactNode)
+  accessor: keyof T | ((row: T) => React.ReactNode)
 }
 
 type GenericTableProps<T> = {
@@ -20,20 +21,41 @@ type GenericTableProps<T> = {
 }
 
 export default function GenericTable<T extends Record<string, ReactNode>>({ columns, data, title }: GenericTableProps<T>) {
+  const { openDialog } = useDialogFormStore();
 
-  const [editableData, setEditableData] = useState(data)
-
-  // Sincroniza editableData cuando data cambia
-  useEffect(() => {
-    setEditableData(data)
-  }, [data])
-
-  const handleInputChange = (rowIndex: number, key: keyof T, value: any) => {
-    setEditableData((prevData) =>
-      prevData.map((row, index) => (index === rowIndex ? { ...row, [key]: value } : row))
-    )
-
-    console.log('editableData => ', editableData)
+  const handleOpenNewTx = () => {
+    openDialog({
+      title: "Nueva Transacción",
+      description: "Agrega una nueva transacción",
+      fields: [
+        {
+          name: "category",
+          label: "Categoría",
+          type: "text",
+          validation: z.string().min(3, "Mínimo 3 caracteres"),
+        },
+        {
+          name: "percentage",
+          label: "Porcentaje",
+          type: "number",
+          validation: z
+            .number()
+            .min(0, "Debe ser positivo")
+            .max(100, "Máximo 100%"),
+        },
+        {
+          name: "amount",
+          label: "Monto",
+          type: "number",
+          validation: z.number().min(1, "Debe ser mayor a 0"),
+        },
+      ],
+      initialValues: {
+        category: "",
+        percentage: 0,
+        amount: 0,
+      },
+    });
   }
 
   return (
@@ -51,28 +73,31 @@ export default function GenericTable<T extends Record<string, ReactNode>>({ colu
                   <TableHead key={index}>{column.header}</TableHead>
                 ))
               }
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              editableData.map((row, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  <TableCell>
-                    <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
+            {data.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
+                <TableCell>
+                  <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
+                </TableCell>
+                {columns.map((column, columnIndex) => (
+                  <TableCell key={columnIndex}>
+                    {typeof column.accessor === "function" ? column.accessor(row) : row[column.accessor]}
                   </TableCell>
-                  {
-                    columns.map((column, columnIndex) => (
-                      <TableCell key={columnIndex}>
-                        <TableCellInput row={row} rowIndex={rowIndex} column={column} handleInputChange={handleInputChange} />
-                      </TableCell>
-                    ))
-                  }
-                </TableRow>
-              ))
-            }
+                ))}
+                <TableCell className="text-right">
+                  <RowActionsMenu
+                    rowData={row}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+
             <TableRow>
               <TableCell colSpan={4}>
-                <Button variant="outline" className="w-full border-dashed">
+                <Button variant="outline" onClick={() => handleOpenNewTx()} className="w-full border-dashed">
                   <Plus className="h-4 w-4 mr-2" /> Add Row
                 </Button>
               </TableCell>

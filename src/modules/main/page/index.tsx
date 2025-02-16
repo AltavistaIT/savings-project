@@ -1,3 +1,4 @@
+import { GenericFormDialog } from "@/components/dialogs/generic-form-dialog";
 import GeneralBudgetTable from "@/components/tables/general-budget-table";
 
 export const MainDashboardPage = () => {
@@ -16,6 +17,7 @@ export const MainDashboardPage = () => {
         </div>
       </div>
       {/* <div className="col-span-1"></div> */}
+      <GenericFormDialog />
     </div>
   );
 }

@@ -1,38 +1,50 @@
 'use client'
 
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "@/components/ui/sidebar";
-import { Briefcase, ChevronDown, ChevronRight, CreditCard, DollarSign, FileText, Gift, Home, PieChart, PiggyBank } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "@/components/ui/sidebar";
+import { ChevronDown, ChevronRight, Home, PieChart } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
 const items = [
   {
-    title: "Home",
-    icon: Home,
-  },
-  {
-    title: "Budget", icon: PieChart,
+    label: "Sección Principal",
     items: [
-      { title: "Categories", href: "/categories" },
-      { title: "Transactions", href: "/transactions" },
+      {
+        title: "Dashboard",
+        icon: Home,
+        href: "/"
+      },
+      {
+        title: "Ingresos",
+        icon: PieChart,
+        href: "/invoices"
+      },
+      {
+        title: "Gastos",
+        icon: PieChart,
+        href: "/expenses"
+      },
+      {
+        title: "Ahorros",
+        icon: PieChart,
+        href: "/savings",
+        items: [
+          {
+            title: "Ahorros",
+            href: "/savings"
+          },
+          {
+            title: "Inversiones",
+            href: "/investments"
+          }
+        ]
+      }
     ]
-  },
-  {
-    title: "Invoices", icon: FileText,
-    items: [
-      { title: "Categories", href: "/categories" },
-      { title: "Transactions", href: "/transactions" },
-    ]
-  },
-  { title: "Expenses", icon: DollarSign },
-  { title: "Investments", icon: Briefcase },
-  { title: "Savings", icon: PiggyBank },
-  { title: "Debt", icon: CreditCard },
-  { title: "Donations", icon: Gift },
+  }
 ]
 
 export default function MainSidebar() {
-  const [openMenus, setOpenMenus] = useState<Record<number, boolean>>({})
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({})
 
   const toggleMenu = (index: number) => {
     setOpenMenus((prev) => ({
@@ -48,55 +60,66 @@ export default function MainSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item, index) => (
-                <SidebarMenuItem key={index} className="mb-6">
-                  {item.items ? (
-                    <>
-                      <SidebarMenuButton
-                        className="flex justify-between items-center w-full text-base font-medium text-gray-700 hover:text-gray-900 transition-all"
-                        onClick={() => toggleMenu(index)}
-                      >
-                        <div className="flex gap-3 items-center">
-                          <item.icon className="w-5 h-5 text-gray-600" />
-                          <span>{item.title}</span>
-                        </div>
-                        <motion.div
-                          animate={{ rotate: openMenus[index] ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {openMenus[index] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                        </motion.div>
-                      </SidebarMenuButton>
+          {items.map((group, groupIndex) => (
+            <div key={groupIndex} >
+              <SidebarGroupLabel className="text-gray-500 ">
+                {group.label}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {group.items.map((item, index) => {
+                    const isOpen = openMenus[index] || false;
+                    return (
+                      <div key={index}>
+                        <SidebarMenuItem >
+                          {item.items ? (
+                            <>
+                              <SidebarMenuButton onClick={() => toggleMenu(index)} className="justify-between">
+                                <div className="flex gap-2 items-center ">
+                                  <item.icon className="w-4 h-4" />
+                                  <span>{item.title}</span>
+                                </div>
+                                <motion.div
+                                  animate={{ rotate: isOpen ? 180 : 0 }}
+                                  transition={{ duration: 0.3 }}
+                                >
+                                  {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                                </motion.div>
+                              </SidebarMenuButton>
+                              <motion.div
+                                initial={false}
+                                animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="overflow-hidden"
+                              >
+                                <SidebarMenuSub >
+                                  {item.items.map((subItem, subIndex) => (
+                                    <SidebarMenuSubItem key={subIndex}>
+                                      <a
 
-                      <motion.div
-                        initial={false}
-                        animate={{ height: openMenus[index] ? "auto" : 0, opacity: openMenus[index] ? 1 : 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <SidebarMenuSub className="pl-6 space-y-3 mt-2">
-                          {item.items.map((subItem, subIndex) => (
-                            <SidebarMenuSubItem key={subIndex}>
-                              <a className="text-sm text-gray-600 hover:text-gray-800 transition-all" href={subItem.href}>
-                                {subItem.title}
-                              </a>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </motion.div>
-                    </>
-                  ) : (
-                    <SidebarMenuButton className="flex gap-3 items-center text-base font-medium text-gray-700 hover:text-gray-900 transition-all">
-                      <item.icon className="w-5 h-5 text-gray-600" />
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  )}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+                                        href={subItem.href}
+                                      >
+                                        {subItem.title}
+                                      </a>
+                                    </SidebarMenuSubItem>
+                                  ))}
+                                </SidebarMenuSub>
+                              </motion.div>
+                            </>
+                          ) : (
+                            <SidebarMenuButton>
+                              <item.icon className="w-5 h-5" />
+                              <span>{item.title}</span>
+                            </SidebarMenuButton>
+                          )}
+                        </SidebarMenuItem>
+                      </div>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </div>
+          ))}
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter></SidebarFooter>

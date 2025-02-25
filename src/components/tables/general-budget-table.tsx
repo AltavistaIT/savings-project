@@ -4,7 +4,8 @@ type GeneralBudgetItem = {
   id: string,
   category: string,
   percentage: number,
-  amount: number
+  amount: number,
+  date: string
 }
 
 const generalBudgetData: GeneralBudgetItem[] = [
@@ -12,19 +13,22 @@ const generalBudgetData: GeneralBudgetItem[] = [
     id: "1",
     category: "Necesidades",
     percentage: 50,
-    amount: 500
+    amount: 500,
+    date: "2021-10-01"
   },
   {
     id: "2",
     category: "Deseos",
     percentage: 30,
-    amount: 300
+    amount: 300,
+    date: "2021-10-02"
   },
   {
     id: "3",
     category: "Ahorros",
     percentage: 20,
-    amount: 200
+    amount: 200,
+    date: "2021-10-03"
   },
 ]
 
@@ -41,6 +45,10 @@ const columns: Column<GeneralBudgetItem>[] = [
     header: "Amount",
     accessor: "amount"
   },
+  {
+    header: "Date",
+    accessor: "date"
+  }
 ]
 
 

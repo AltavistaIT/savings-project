@@ -19,11 +19,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect } from "react";
 import * as z from "zod";
 import { DefaultValues, Path, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDialogFormStore } from "@/hooks/store/generic-dialog-form-store";
+import { useEffect } from "react";
 
 export function GenericFormDialog<T extends Record<string, any>>() {
   const {
@@ -33,21 +33,21 @@ export function GenericFormDialog<T extends Record<string, any>>() {
     handleSubmit,
   } = useDialogFormStore()
 
-  useEffect(() => {
-    console.log('isDialogOpen => ', isDialogOpen)
-    console.log('formConfig => ', formConfig)
-  }, [isDialogOpen, formConfig])
-
   const schema: z.ZodObject<Record<keyof T, z.ZodTypeAny>> = z.object(
     Object.fromEntries(
       formConfig.fields.map((field) => [field.name, field.validation])
     ) as Record<keyof T, z.ZodTypeAny>
-  );
+  )
 
   const form = useForm<T>({
     resolver: zodResolver(schema) as any,
     defaultValues: formConfig.initialValues as DefaultValues<T>,
-  });
+  })
+
+  useEffect(() => {
+    form.reset(formConfig.initialValues as DefaultValues<T>)
+  }, [formConfig.initialValues, form])
+
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={(open) => !open && closeDialog()} >
@@ -70,7 +70,7 @@ export function GenericFormDialog<T extends Record<string, any>>() {
                   <FormItem>
                     <FormLabel>{field.label}</FormLabel>
                     <FormControl>
-                      <Input type={field.type} defaultValue={formConfig.initialValues[field.name]} {...formField} />
+                      <Input type={field.type} {...formField} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

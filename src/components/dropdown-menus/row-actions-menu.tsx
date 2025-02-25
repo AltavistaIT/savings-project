@@ -74,7 +74,7 @@ export function RowActionsMenu<T extends Record<string, ReactNode>>({
           <DropdownMenuItem onSelect={() => handleEditOpen()}>
             Edit
           </DropdownMenuItem>
-          {/* <DropdownMenuItem onSelect={() => setDeleteOpen(true)}>Delete</DropdownMenuItem> */}
+          <DropdownMenuItem onSelect={() => { }}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 

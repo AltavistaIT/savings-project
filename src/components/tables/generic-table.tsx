@@ -96,7 +96,7 @@ export default function GenericTable<T extends Record<string, ReactNode>>({ colu
             ))}
 
             <TableRow>
-              <TableCell colSpan={4}>
+              <TableCell colSpan={columns.length + 2}>
                 <Button variant="outline" onClick={() => handleOpenNewTx()} className="w-full border-dashed">
                   <Plus className="h-4 w-4 mr-2" /> Add Row
                 </Button>

@@ -9,7 +9,6 @@ const items = [
   {
     title: "Home",
     icon: Home,
-    href
   },
   {
     title: "Budget", icon: PieChart,

@@ -1,11 +1,30 @@
 'use client'
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "@/components/ui/sidebar";
-import { ChevronDown, ChevronRight, Home, PieChart } from "lucide-react";
+import { ChevronDown, ChevronRight, Home, LucideIcon, PieChart } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import SidebarProfile from "./sidebar-profile";
 
-const items = [
+
+interface SubItem {
+  title: string;
+  href: string;
+}
+
+interface MenuItem {
+  title: string;
+  icon?: LucideIcon;
+  href: string;
+  items?: SubItem[];
+}
+
+interface MenuGroup {
+  label: string;
+  items: MenuItem[];
+}
+
+const items: MenuGroup[] = [
   {
     label: "Sección Principal",
     items: [
@@ -25,19 +44,34 @@ const items = [
         href: "/expenses"
       },
       {
-        title: "Ahorros",
+        title: "Ahorros e Inversiones",
+        icon: PieChart,
+        href: "/savings"
+      }
+    ]
+  },
+  {
+    label: "Análisis y Reportes",
+    items: [
+      {
+        title: "Reportes Mensuales",
+        icon: PieChart,
+        href: "/invoices"
+      },
+      {
+        title: "Tendencias Financieras",
         icon: PieChart,
         href: "/savings",
-        items: [
-          {
-            title: "Ahorros",
-            href: "/savings"
-          },
-          {
-            title: "Inversiones",
-            href: "/investments"
-          }
-        ]
+      }
+    ]
+  },
+  {
+    label: "Otros",
+    items: [
+      {
+        title: "Simulador de Inversiones",
+        icon: PieChart,
+        href: "/savings",
       }
     ]
   }
@@ -68,15 +102,16 @@ export default function MainSidebar() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {group.items.map((item, index) => {
-                    const isOpen = openMenus[index] || false;
+                    const isOpen = openMenus[index] || false
+                    const hasSubItems = Array.isArray(item?.items)
                     return (
                       <div key={index}>
                         <SidebarMenuItem >
-                          {item.items ? (
+                          {hasSubItems ? (
                             <>
                               <SidebarMenuButton onClick={() => toggleMenu(index)} className="justify-between">
                                 <div className="flex gap-2 items-center ">
-                                  <item.icon className="w-4 h-4" />
+                                  {item.icon && <item.icon className="w-4 h-4" />}
                                   <span>{item.title}</span>
                                 </div>
                                 <motion.div
@@ -93,7 +128,7 @@ export default function MainSidebar() {
                                 className="overflow-hidden"
                               >
                                 <SidebarMenuSub >
-                                  {item.items.map((subItem, subIndex) => (
+                                  {item.items?.map((subItem, subIndex) => (
                                     <SidebarMenuSubItem key={subIndex}>
                                       <a
 
@@ -108,7 +143,7 @@ export default function MainSidebar() {
                             </>
                           ) : (
                             <SidebarMenuButton>
-                              <item.icon className="w-5 h-5" />
+                              {item.icon && <item.icon className="w-4 h-4" />}
                               <span>{item.title}</span>
                             </SidebarMenuButton>
                           )}
@@ -122,7 +157,9 @@ export default function MainSidebar() {
           ))}
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <SidebarFooter>
+        <SidebarProfile />
+      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -4,15 +4,15 @@ import GeneralBudgetTable from "@/components/tables/general-budget-table";
 
 export const MainDashboardPage = () => {
   return (
-    <div className="flex justify-center">
+    <>
       <div className="w-11/12 grid grid-cols-1 gap-8">
         <DateSelector />
         <GeneralBudgetTable />
+        {/* <GeneralBudgetTable />
         <GeneralBudgetTable />
-        <GeneralBudgetTable />
-        <GeneralBudgetTable />
+        <GeneralBudgetTable /> */}
       </div>
       <GenericFormDialog />
-    </div>
+    </>
   );
 }

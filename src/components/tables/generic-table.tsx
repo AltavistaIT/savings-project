@@ -11,7 +11,7 @@ import * as z from "zod";
 
 export type Column<T> = {
   header: string,
-  accessor: keyof T | ((row: T) => React.ReactNode)
+  accessor: (row: T) => ReactNode
 }
 
 type GenericTableProps<T> = {
@@ -20,7 +20,7 @@ type GenericTableProps<T> = {
   data: T[];
 }
 
-export default function GenericTable<T extends Record<string, ReactNode>>({ columns, data, title }: GenericTableProps<T>) {
+export default function GenericTable<T extends object>({ columns, data, title }: GenericTableProps<T>) {
   const { openDialog } = useDialogFormStore();
 
   const handleOpenNewTx = () => {
@@ -78,20 +78,35 @@ export default function GenericTable<T extends Record<string, ReactNode>>({ colu
           </TableHeader>
           <TableBody>
             {data.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow key={rowIndex} className={rowIndex === data.length - 1 ? "font-bold" : ""}>
                 <TableCell>
-                  <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
+                  {
+                    rowIndex !== data.length - 1
+                      ?
+                      <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
+                      : ""
+                  }
                 </TableCell>
-                {columns.map((column, columnIndex) => (
+                {/* {columns.map((column, columnIndex) => (
                   <TableCell key={columnIndex}>
                     {typeof column.accessor === "function" ? column.accessor(row) : row[column.accessor]}
                   </TableCell>
+                ))} */}
+                {columns.map((column, columnIndex) => (
+                  <TableCell key={columnIndex}>
+                    {column.accessor(row)}
+                  </TableCell>
                 ))}
-                <TableCell className="text-right">
-                  <RowActionsMenu
-                    rowData={row}
-                  />
-                </TableCell>
+                {/* <TableCell className="text-right">
+                  {
+                    rowIndex !== data.length - 1
+                      ?
+                      <RowActionsMenu
+                        rowData={row}
+                      />
+                      : ""
+                  }
+                </TableCell> */}
               </TableRow>
             ))}
 

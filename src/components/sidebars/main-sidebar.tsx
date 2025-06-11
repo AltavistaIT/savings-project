@@ -142,10 +142,12 @@ export default function MainSidebar() {
                               </motion.div>
                             </>
                           ) : (
-                            <SidebarMenuButton>
-                              {item.icon && <item.icon className="w-4 h-4" />}
-                              <span>{item.title}</span>
-                            </SidebarMenuButton>
+                            <a href={item.href}>
+                              <SidebarMenuButton>
+                                {item.icon && <item.icon className="w-4 h-4" />}
+                                <span>{item.title}</span>
+                              </SidebarMenuButton>
+                            </a>
                           )}
                         </SidebarMenuItem>
                       </div>

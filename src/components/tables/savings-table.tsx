@@ -1,6 +1,6 @@
 import GenericTable, { Column } from "./generic-table";
 
-type InvoiceItem = {
+type SavingsItem = {
   id: string;
   description: string;
   category: string;
@@ -9,10 +9,10 @@ type InvoiceItem = {
   date: string;
 }
 
-const invoicesData: InvoiceItem[] = [
+const savingsData: SavingsItem[] = [
   {
     id: "1",
-    description: "Ingreso 1",
+    description: "Ahorro 1",
     category: "Necesidades",
     percentage: 50,
     amount: 500,
@@ -20,7 +20,7 @@ const invoicesData: InvoiceItem[] = [
   },
   {
     id: "2",
-    description: "Ingreso 2",
+    description: "Ahorro 2",
     category: "Deseos",
     percentage: 30,
     amount: 300,
@@ -28,7 +28,7 @@ const invoicesData: InvoiceItem[] = [
   },
   {
     id: "3",
-    description: "Ingreso 3",
+    description: "Ahorro 3",
     category: "Ahorros",
     percentage: 20,
     amount: 200,
@@ -44,7 +44,7 @@ const invoicesData: InvoiceItem[] = [
   }
 ]
 
-const columns: Column<InvoiceItem>[] = [
+const columns: Column<SavingsItem>[] = [
   {
     header: "Description",
     accessor: "description",
@@ -67,10 +67,10 @@ const columns: Column<InvoiceItem>[] = [
   },
 ]
 
-export default function InvoicesTable() {
+export default function SavingsTable() {
   return (
     <>
-      <GenericTable title="Ingresos" columns={columns} data={invoicesData} />
+      <GenericTable title="Ahorros" columns={columns} data={savingsData} />
     </>
   )
 }

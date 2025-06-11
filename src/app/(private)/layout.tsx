@@ -11,7 +11,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <div className="fixed w-full z-10">
             <MainNavbar />
           </div>
-          <div className="py-20">
+          <div className="py-20 flex justify-center">
             {children}
           </div>
         </div>

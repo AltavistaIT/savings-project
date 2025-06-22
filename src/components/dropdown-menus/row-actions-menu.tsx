@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,33 +8,32 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import * as z from "zod";
 import { useDialogFormStore } from "@/hooks/store/generic-dialog-form-store";
+import { MappedTransactions } from "../tables/generic-table";
 
-type RowActionsMenuProps<T extends Record<string, unknown>> = {
-  rowData: T;
+type RowActionsMenuProps = {
+  rowData: MappedTransactions;
 };
 
-export function RowActionsMenu<T extends Record<string, ReactNode>>({
+export function RowActionsMenu({
   rowData,
-}: RowActionsMenuProps<T>) {
+}: RowActionsMenuProps) {
   const {
     openDialog,
   } = useDialogFormStore();
 
-  const transformedFields = [
+  const transactionFields = [
     {
       name: "category",
       label: "Categoría",
-      type: "text",
+      type: "select",
+      options: ["Debito", "Credito"],
       validation: z.string().min(3, "Mínimo 3 caracteres"),
     },
     {
-      name: "percentage",
-      label: "Porcentaje",
-      type: "number",
-      validation: z
-        .number()
-        .min(0, "Debe ser positivo")
-        .max(100, "Máximo 100%"),
+      name: "description",
+      label: "Descripción",
+      type: "text",
+      validation: z.string().min(3, "Mínimo 3 caracteres"),
     },
     {
       name: "amount",
@@ -45,10 +43,9 @@ export function RowActionsMenu<T extends Record<string, ReactNode>>({
     },
   ];
 
-  // Extraemos solo los valores que nos interesan del rowData
-  const transformedDefaultValues = {
-    category: rowData.category || "",
-    percentage: rowData.percentage || 0,
+  const transactionDefaultValues = {
+    category: rowData.type_id || "",
+    description: rowData.description || "",
     amount: rowData.amount || 0,
   };
 
@@ -56,8 +53,8 @@ export function RowActionsMenu<T extends Record<string, ReactNode>>({
     openDialog({
       title: "Editar",
       description: "Edita los datos de la TX seleccionada",
-      fields: transformedFields,
-      initialValues: transformedDefaultValues as z.infer<z.ZodObject<Record<keyof T, z.ZodTypeAny>>>,
+      fields: transactionFields,
+      initialValues: transactionDefaultValues
     });
   };
 

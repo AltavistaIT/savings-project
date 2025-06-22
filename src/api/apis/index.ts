@@ -3,3 +3,4 @@
 export * from './DocsApi';
 export * from './HealthApi';
 export * from './TablesApi';
+export * from './TransactionsApi';

@@ -1,21 +1,12 @@
 "use client";
-import GenericTable, { Column } from "./generic-table";
-import useSWR from "swr";
+import GenericTable, { Column, MappedTransactions } from "./generic-table";
 import { useEffect, useState } from "react";
 import { GetTableUsecase } from "@/usecases/get-table-uc";
 import { TableClientImpl } from "@/infraestructure/http/table-client-impl";
-import { HttpClientImpl } from "@/infraestructure/http/http-client-impl";
 import { InternalApiClientImpl } from "@/infraestructure/http/internal-api-client-impl";
-import { TableEntity, TableWithTransactionsAggregate, TransactionEntity } from "@/api";
-import { table } from "console";
+import { TableEntity } from "@/api";
 
-type MappedTransactions = TransactionEntity & {
-  percentage: number
-}
-
-// TODO: Devulve las txs en string nomas...
-
-const columns: Column<MappedTransactions>[] = [
+const columns: Column[] = [
   {
     header: "Category",
     accessor: (row) => row.type_id,
@@ -41,8 +32,7 @@ const columns: Column<MappedTransactions>[] = [
 
 export default function GeneralBudgetTable() {
   const [table, setTable] = useState<TableEntity>()
-  const [transactions, setTransactions] = useState<TransactionEntity[]>()
-  const [mappedTransactions, setMappedTransactions] = useState<MappedTransactions[]>([])
+  const [transactions, setTransactions] = useState<MappedTransactions[]>([])
 
   useEffect(() => {
     handlerGetTable()
@@ -75,8 +65,7 @@ export default function GeneralBudgetTable() {
         percentage
       }
     })
-    setTransactions(transactions)
-    setMappedTransactions(mappedTransactions)
+    setTransactions(mappedTransactions)
   }
 
   return (
@@ -84,7 +73,7 @@ export default function GeneralBudgetTable() {
       {
         !transactions && <p>Loading...</p>
       }
-      <GenericTable title="General Budget" columns={columns} data={mappedTransactions} />
+      <GenericTable title="General Budget" columns={columns} transactions={transactions} totals={{ amount: table?.amount || 0 }} />
     </>
   );
 }

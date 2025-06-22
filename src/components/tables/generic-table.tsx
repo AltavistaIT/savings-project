@@ -8,19 +8,27 @@ import { GripVertical, Plus } from "lucide-react";
 import { RowActionsMenu } from "../dropdown-menus/row-actions-menu";
 import { useDialogFormStore } from "@/hooks/store/generic-dialog-form-store";
 import * as z from "zod";
+import { TransactionEntity } from "@/api";
 
-export type Column<T> = {
+export type Column = {
   header: string,
-  accessor: (row: T) => ReactNode
+  accessor: (row: MappedTransactions) => ReactNode
 }
 
-type GenericTableProps<T> = {
+export type MappedTransactions = TransactionEntity & {
+  percentage: number
+}
+
+type GenericTableProps = {
   title: string,
-  columns: Column<T>[];
-  data: T[];
+  columns: Column[];
+  transactions: MappedTransactions[];
+  totals: {
+    amount: number
+  }
 }
 
-export default function GenericTable<T extends object>({ columns, data, title }: GenericTableProps<T>) {
+export default function GenericTable({ columns, transactions, title, totals }: GenericTableProps) {
   const { openDialog } = useDialogFormStore();
 
   const handleOpenNewTx = () => {
@@ -77,38 +85,28 @@ export default function GenericTable<T extends object>({ columns, data, title }:
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((row, rowIndex) => (
-              <TableRow key={rowIndex} className={rowIndex === data.length - 1 ? "font-bold" : ""}>
+            {transactions.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
                 <TableCell>
-                  {
-                    rowIndex !== data.length - 1
-                      ?
-                      <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
-                      : ""
-                  }
+                  <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
                 </TableCell>
-                {/* {columns.map((column, columnIndex) => (
-                  <TableCell key={columnIndex}>
-                    {typeof column.accessor === "function" ? column.accessor(row) : row[column.accessor]}
-                  </TableCell>
-                ))} */}
                 {columns.map((column, columnIndex) => (
                   <TableCell key={columnIndex}>
                     {column.accessor(row)}
                   </TableCell>
                 ))}
-                {/* <TableCell className="text-right">
-                  {
-                    rowIndex !== data.length - 1
-                      ?
-                      <RowActionsMenu
-                        rowData={row}
-                      />
-                      : ""
-                  }
-                </TableCell> */}
+                <TableCell className="text-right">
+                  <RowActionsMenu
+                    rowData={row}
+                  />
+                </TableCell>
               </TableRow>
             ))}
+
+            <TableRow className="font-bold">
+              <TableCell >Totales</TableCell>
+              <TableCell className="text-right">{totals.amount}</TableCell>
+            </TableRow>
 
             <TableRow>
               <TableCell colSpan={columns.length + 2}>

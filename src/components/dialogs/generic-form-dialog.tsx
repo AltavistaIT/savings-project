@@ -70,7 +70,20 @@ export function GenericFormDialog<T extends Record<string, any>>() {
                   <FormItem>
                     <FormLabel>{field.label}</FormLabel>
                     <FormControl>
-                      <Input type={field.type} {...formField} />
+                      {field.type === "select" ? (
+                        <select
+                          {...formField}
+                          className="w-full border border-input bg-background px-3 py-2 text-sm rounded-md" // o usa un componente UI si tienes
+                        >
+                          {(field.options as string[]).map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <Input type={field.type} {...formField} />
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

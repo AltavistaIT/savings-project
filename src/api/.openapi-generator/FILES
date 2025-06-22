@@ -1,9 +1,11 @@
 apis/DocsApi.ts
 apis/HealthApi.ts
 apis/TablesApi.ts
+apis/TransactionsApi.ts
 apis/index.ts
 index.ts
 models/CreateTableModel.ts
+models/CreateTransactionModel.ts
 models/ErrorResponse.ts
 models/GetTableModel.ts
 models/SuccessResponse.ts
@@ -12,5 +14,6 @@ models/TableWithTransactionsAggregate.ts
 models/TablesIdGet200Response.ts
 models/TablesPost200Response.ts
 models/TransactionEntity.ts
+models/TransactionsPost200Response.ts
 models/index.ts
 runtime.ts

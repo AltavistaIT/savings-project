@@ -1,8 +1,8 @@
-import { MainDashboardPage } from "@/modules/main/page";
+import { ReportsMainPage } from "@/views/reports";
 
 const MainDashboard = () => {
   return (
-    <MainDashboardPage />
+    <ReportsMainPage />
   );
 }
 

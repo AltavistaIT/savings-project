@@ -7,24 +7,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import * as z from "zod";
-import { useDialogFormStore } from "@/hooks/store/generic-dialog-form-store";
-import { MappedTransactions } from "../tables/generic-table";
+import { FormField, useDialogFormStore } from "@/hooks/store/dialog-form-store";
+import { MappedTransactions } from "../tables/types";
 
-type RowActionsMenuProps = {
+type RowTxActionsMenuProps = {
   rowData: MappedTransactions;
 };
 
-export function RowActionsMenu({
+export function RowTxActionsMenu({
   rowData,
-}: RowActionsMenuProps) {
+}: RowTxActionsMenuProps) {
   const {
     openDialog,
   } = useDialogFormStore();
 
-  const transactionFields = [
+  const transactionFields: FormField[] = [
     {
-      name: "category",
-      label: "Categoría",
+      name: "type",
+      label: "Tipo",
       type: "select",
       options: ["Debito", "Credito"],
       validation: z.string().min(3, "Mínimo 3 caracteres"),
@@ -54,6 +54,7 @@ export function RowActionsMenu({
       title: "Editar",
       description: "Edita los datos de la TX seleccionada",
       fields: transactionFields,
+      action: "update",
       initialValues: transactionDefaultValues
     });
   };

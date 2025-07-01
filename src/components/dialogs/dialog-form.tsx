@@ -22,10 +22,10 @@ import {
 import * as z from "zod";
 import { DefaultValues, Path, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDialogFormStore } from "@/hooks/store/generic-dialog-form-store";
+import { useDialogFormStore } from "@/hooks/store/dialog-form-store";
 import { useEffect } from "react";
 
-export function GenericFormDialog<T extends Record<string, any>>() {
+export function DialogForm<T extends Record<string, any>>() {
   const {
     formConfig,
     isDialogOpen,
@@ -75,7 +75,7 @@ export function GenericFormDialog<T extends Record<string, any>>() {
                           {...formField}
                           className="w-full border border-input bg-background px-3 py-2 text-sm rounded-md" // o usa un componente UI si tienes
                         >
-                          {(field.options as string[]).map((option) => (
+                          {(field.options || []).map((option) => (
                             <option key={option} value={option}>
                               {option}
                             </option>

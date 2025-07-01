@@ -1,6 +1,6 @@
 // import GenericTransactionsTable, { Column } from "./generic-transactions-table";
 
-// type InvoiceItem = {
+// type SavingsItem = {
 //   id: string;
 //   description: string;
 //   category: string;
@@ -9,10 +9,10 @@
 //   date: string;
 // }
 
-// const invoicesData: InvoiceItem[] = [
+// const savingsData: SavingsItem[] = [
 //   {
 //     id: "1",
-//     description: "Ingreso 1",
+//     description: "Ahorro 1",
 //     category: "Necesidades",
 //     percentage: 50,
 //     amount: 500,
@@ -20,7 +20,7 @@
 //   },
 //   {
 //     id: "2",
-//     description: "Ingreso 2",
+//     description: "Ahorro 2",
 //     category: "Deseos",
 //     percentage: 30,
 //     amount: 300,
@@ -28,7 +28,7 @@
 //   },
 //   {
 //     id: "3",
-//     description: "Ingreso 3",
+//     description: "Ahorro 3",
 //     category: "Ahorros",
 //     percentage: 20,
 //     amount: 200,
@@ -44,7 +44,7 @@
 //   }
 // ]
 
-// const columns: Column<InvoiceItem>[] = [
+// const columns: Column<SavingsItem>[] = [
 //   {
 //     header: "Description",
 //     accessor: "description",
@@ -67,10 +67,10 @@
 //   },
 // ]
 
-// export default function InvoicesTable() {
+// export default function SavingsTable() {
 //   return (
 //     <>
-//       <GenericTransactionsTable title="Ingresos" columns={columns} data={invoicesData} />
+//       <GenericTransactionsTable title="Ahorros" columns={columns} data={savingsData} />
 //     </>
 //   )
 // }

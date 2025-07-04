@@ -12,7 +12,7 @@ export default function Config() {
       return;
     }
 
-    LocalStorageService.setItem('config', config.data);
+    LocalStorageService.setItem("config", config.data!);
   }
 
   handleGetConfig();

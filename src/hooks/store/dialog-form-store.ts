@@ -2,6 +2,7 @@ import { create } from "zustand";
 import * as z from "zod";
 import { useToastStore } from "./toast-store";
 import { toast } from "sonner";
+import { ApiRouteClient } from "@/services/api-route-client";
 
 type FormFieldType = "text" | "number" | "select";
 export type FormField = {
@@ -9,7 +10,7 @@ export type FormField = {
   label: string;
   type: FormFieldType;
   validation: z.ZodTypeAny;
-  options?: string[];
+  options?: Array<{ label: string; value: string }>;
 };
 
 type FormAction = "create" | "update";
@@ -53,18 +54,21 @@ export const useDialogFormStore = create<DialogFormState>((set, get) => ({
   closeDialog: () => set({ isDialogOpen: false }),
   handleSubmit: async (data) => {
     const state = get();
+    const apiRouteClient = new ApiRouteClient();
     switch (state.formConfig.action) {
       case "create":
-      // const response = await container.createTxUsecase.handler({
-      //   ...data,
-      //   amount: Number(data.amount),
-      // });
-      // if (!response.success) {
-      //   state.callbacks?.onError?.(response.message || "");
-      // } else {
-      //   set({ isDialogOpen: false });
-      // }
-      // break;
+        const response = await apiRouteClient.fetch("createTransaction", {
+          body: {
+            ...data,
+            amount: Number(data.amount),
+          },
+        });
+        if (!response.success) {
+          state.callbacks?.onError?.(response.message || "");
+        } else {
+          set({ isDialogOpen: false });
+        }
+        break;
       case "update":
         return { isDialogOpen: false };
     }

@@ -9,8 +9,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useEffect, useState } from "react";
-import { TableEntity, CreateTransactionModel } from "@/api";
+import { use, useEffect, useState } from "react";
+import { TableEntity, CreateTransactionModel, ConfigGet200Response } from "@/api";
 import { Column, MappedTransactions } from "./types";
 import { GripVertical, Plus } from "lucide-react";
 import { RowTxActionsMenu } from "../dropdown-menus/row-tx-actions-menu";
@@ -19,6 +19,7 @@ import { z } from "zod";
 import { useDialogFormStore } from "@/hooks/store/dialog-form-store";
 import { useToastStore } from "@/hooks/store/toast-store";
 import { ApiRouteClient } from "@/services/api-route-client";
+import { LocalStorageService } from "@/services/local-storage-service";
 
 const columns: Column[] = [
   {
@@ -47,11 +48,14 @@ const columns: Column[] = [
 export default function ExpensesTable() {
   const [table, setTable] = useState<TableEntity>();
   const [transactions, setTransactions] = useState<MappedTransactions[]>([]);
+  const [txTypes, setTxTypes] = useState<Array<{ label: string; value: string }>>([]);
   const { openDialog } = useDialogFormStore();
   const { showToast } = useToastStore();
   const apiRouteClient = new ApiRouteClient()
 
-  const handleCreateTx = () => {
+  const handleCreateTx = async () => {
+    await handlerGetTxTypes();
+
     openDialog({
       title: "Nuevo Gasto",
       description: "Ingresa los datos del gasto",
@@ -67,7 +71,7 @@ export default function ExpensesTable() {
           name: "type_id",
           label: "Tipo de Gasto",
           type: "select",
-          options: ["Comida", "Transporte", "Otros"],
+          options: txTypes,
           validation: z.string().min(3, "Mínimo 3 caracteres"),
         },
         {
@@ -84,7 +88,10 @@ export default function ExpensesTable() {
           name: "currency",
           label: "Moneda",
           type: "select",
-          options: ["ARS", "USD", "EUR"],
+          options: [
+            { label: "ARS", value: "ARS" },
+            { label: "USD", value: "USD" },
+          ],
           validation: z.string().min(3, "Mínimo 3 caracteres"),
         },
       ],
@@ -130,6 +137,18 @@ export default function ExpensesTable() {
     setTransactions(mappedTransactions);
   };
 
+  const handlerGetTxTypes = async () => {
+    const data = LocalStorageService.getItem("config")
+    if (!data || !data.transaction_types) {
+      return;
+    }
+    console.log('data', data);
+
+    const txTypes = data.transaction_types.map((type) => ({ label: type.description!, value: String(type.id!) }))
+    console.log('txTypes', txTypes);
+    setTxTypes(txTypes)
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -172,7 +191,7 @@ export default function ExpensesTable() {
               <TableCell colSpan={columns.length + 2}>
                 <Button
                   variant="outline"
-                  onClick={() => handleCreateTx()}
+                  onClick={async () => await handleCreateTx()}
                   className="w-full border-dashed"
                 >
                   <Plus className="h-4 w-4 mr-2" /> Add Row

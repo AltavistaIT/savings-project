@@ -1,5 +1,6 @@
 import {
   ConfigGet200Response,
+  CreateTransactionModel,
   ErrorResponse,
   HTTPMethod,
   TablesIdGet200Response,
@@ -7,9 +8,18 @@ import {
 } from "@/api";
 
 interface ApiRoutesMap {
-  getConfig: ConfigGet200Response;
-  getTable: TablesIdGet200Response;
-  createTransaction: TransactionsPost200Response;
+  getConfig: {
+    requestPayload: null;
+    response: ConfigGet200Response;
+  };
+  getTable: {
+    requestPayload: null;
+    response: TablesIdGet200Response;
+  };
+  createTransaction: {
+    requestPayload: CreateTransactionModel;
+    response: TransactionsPost200Response;
+  };
 }
 
 const apiRoutesMap: Record<
@@ -43,12 +53,12 @@ export class ApiRouteClient {
     params: {
       id?: string | number;
       queryParams?: Record<string, string>;
-      body?: any;
+      body?: ApiRoutesMap[K]["requestPayload"];
       options?: NextFetchRequestConfig & {
         headers?: Record<string, string>;
       };
     }
-  ): Promise<ApiRoutesMap[K] & ErrorResponse> {
+  ): Promise<ApiRoutesMap[K]["response"] & ErrorResponse> {
     const route = apiRoutesMap[service];
 
     if (!route) {

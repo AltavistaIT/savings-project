@@ -1,5 +1,4 @@
 import { HTTPMethod } from "@/api";
-import { NextRequest } from "next/server";
 
 export class InternalAPIClient {
   private url = "http://localhost:8081/api";

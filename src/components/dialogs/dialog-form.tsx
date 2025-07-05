@@ -68,7 +68,11 @@ export function DialogForm<T extends Record<string, any>>() {
                 name={field.name as Path<T>}
                 render={({ field: formField }) => (
                   <FormItem>
-                    <FormLabel>{field.label}</FormLabel>
+                    {
+                      field.type !== "hidden" ?
+                        <FormLabel>{field.label}</FormLabel>
+                        : null
+                    }
                     <FormControl>
                       {field.type === "select" ? (
                         <select
@@ -76,8 +80,8 @@ export function DialogForm<T extends Record<string, any>>() {
                           className="w-full border border-input bg-background px-3 py-2 text-sm rounded-md" // o usa un componente UI si tienes
                         >
                           {(field.options || []).map((option) => (
-                            <option key={option} value={option}>
-                              {option}
+                            <option key={option.label} value={option.value}>
+                              {option.label}
                             </option>
                           ))}
                         </select>

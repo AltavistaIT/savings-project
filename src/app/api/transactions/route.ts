@@ -1,9 +1,13 @@
-import { ErrorResponse, TransactionsPost200Response } from "@/api";
+import {
+  CreateTransactionModel,
+  ErrorResponse,
+  TransactionsPost200Response,
+} from "@/api";
 import { InternalAPIClient } from "@/services/internal-api-client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const payload = await request.json();
+  const payload: CreateTransactionModel = await request.json();
   console.log("payload", payload);
   const result = await new InternalAPIClient().request<
     TransactionsPost200Response | ErrorResponse

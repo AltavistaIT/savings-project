@@ -48,13 +48,19 @@ const columns: Column[] = [
 export default function ExpensesTable() {
   const [table, setTable] = useState<TableEntity>();
   const [transactions, setTransactions] = useState<MappedTransactions[]>([]);
-  const [txTypes, setTxTypes] = useState<Array<{ label: string; value: string }>>([]);
   const { openDialog } = useDialogFormStore();
   const { showToast } = useToastStore();
   const apiRouteClient = new ApiRouteClient()
 
   const handleCreateTx = async () => {
-    await handlerGetTxTypes();
+    const data = LocalStorageService.getItem("config")
+    if (!data || !data.transaction_types) {
+      return;
+    }
+    console.log('data', data);
+
+    const txTypes = data.transaction_types.map((type) => ({ label: type.description!, value: String(type.id!) }))
+    console.log('txTypes', txTypes);
 
     openDialog({
       title: "Nuevo Gasto",
@@ -72,7 +78,7 @@ export default function ExpensesTable() {
           label: "Tipo de Gasto",
           type: "select",
           options: txTypes,
-          validation: z.string().min(3, "Mínimo 3 caracteres"),
+          validation: z.string().nonempty("Debe seleccionar un tipo"),
         },
         {
           name: "amount",
@@ -94,12 +100,19 @@ export default function ExpensesTable() {
           ],
           validation: z.string().min(3, "Mínimo 3 caracteres"),
         },
+        {
+          name: "table_id",
+          label: "Table",
+          type: "hidden",
+          validation: z.number().min(1, "Debe tener al menos un digito"),
+        }
       ],
       initialValues: {
         description: "",
         type_id: "",
         amount: 0,
         currency: "ARS",
+        table_id: table?.id,
       },
     }, {
       onError: (message) => {
@@ -136,18 +149,6 @@ export default function ExpensesTable() {
     });
     setTransactions(mappedTransactions);
   };
-
-  const handlerGetTxTypes = async () => {
-    const data = LocalStorageService.getItem("config")
-    if (!data || !data.transaction_types) {
-      return;
-    }
-    console.log('data', data);
-
-    const txTypes = data.transaction_types.map((type) => ({ label: type.description!, value: String(type.id!) }))
-    console.log('txTypes', txTypes);
-    setTxTypes(txTypes)
-  }
 
   return (
     <Card>
@@ -191,7 +192,7 @@ export default function ExpensesTable() {
               <TableCell colSpan={columns.length + 2}>
                 <Button
                   variant="outline"
-                  onClick={async () => await handleCreateTx()}
+                  onClick={() => handleCreateTx()}
                   className="w-full border-dashed"
                 >
                   <Plus className="h-4 w-4 mr-2" /> Add Row

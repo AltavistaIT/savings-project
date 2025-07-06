@@ -10,7 +10,7 @@ export type FormField = {
   label: string;
   type: FormFieldType;
   validation: z.ZodTypeAny;
-  options?: Array<{ label: string; value: string }>;
+  options?: Array<{ label: string; value: string | number }>;
 };
 
 type FormAction = "create" | "update";
@@ -57,7 +57,6 @@ export const useDialogFormStore = create<DialogFormState>((set, get) => ({
     const apiRouteClient = new ApiRouteClient();
     switch (state.formConfig.action) {
       case "create":
-        console.log("data", data);
         const response = await apiRouteClient.fetch("createTransaction", {
           body: {
             ...data,
@@ -68,6 +67,7 @@ export const useDialogFormStore = create<DialogFormState>((set, get) => ({
         if (!response.success) {
           state.callbacks?.onError?.(response.message || "");
         } else {
+          state.callbacks?.onSuccess?.();
           set({ isDialogOpen: false });
         }
         break;

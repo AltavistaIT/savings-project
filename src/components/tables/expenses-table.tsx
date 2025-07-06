@@ -54,13 +54,12 @@ export default function ExpensesTable() {
 
   const handleCreateTx = async () => {
     const data = LocalStorageService.getItem("config")
-    if (!data || !data.transaction_types) {
+    if (!data || !data.transaction_types || !data.currencies) {
       return;
     }
-    console.log('data', data);
 
-    const txTypes = data.transaction_types.map((type) => ({ label: type.description!, value: String(type.id!) }))
-    console.log('txTypes', txTypes);
+    const txTypes = data.transaction_types.map((type) => ({ label: type.description!, value: type.id! }))
+    const currencies = data.currencies.map((currency) => ({ label: currency.description!, value: currency.id! }))
 
     openDialog({
       title: "Nuevo Gasto",
@@ -78,7 +77,7 @@ export default function ExpensesTable() {
           label: "Tipo de Gasto",
           type: "select",
           options: txTypes,
-          validation: z.string().nonempty("Debe seleccionar un tipo"),
+          validation: z.string().min(1, "Debe seleccionar un tipo").transform((value) => Number(value)).refine((value) => value > 0, "Debe ser mayor a 0"),
         },
         {
           name: "amount",
@@ -86,37 +85,38 @@ export default function ExpensesTable() {
           type: "number",
           validation: z
             .string()
-            .min(1, "Debe tener al menos un digito")
+            .min(1, "Debe ser mayor a 0")
             .transform((value) => Number(value))
             .refine((value) => value > 0, "Debe ser mayor a 0"),
         },
         {
-          name: "currency",
+          name: "currency_id",
           label: "Moneda",
           type: "select",
-          options: [
-            { label: "ARS", value: "ARS" },
-            { label: "USD", value: "USD" },
-          ],
-          validation: z.string().min(3, "Mínimo 3 caracteres"),
+          options: currencies,
+          validation: z.string().min(1, "Debe seleccionar una moneda").transform((value) => Number(value)).refine((value) => value > 0, "Debe ser mayor a 0"),
         },
         {
           name: "table_id",
           label: "Table",
           type: "hidden",
-          validation: z.number().min(1, "Debe tener al menos un digito"),
+          validation: z.number().min(1, "Debe tener una tabla asociada"),
         }
       ],
       initialValues: {
         description: "",
-        type_id: "",
-        amount: 0,
-        currency: "ARS",
+        type_id: String(txTypes[0].value),
+        amount: "1",
+        currency_id: String(currencies[0].value),
         table_id: table?.id,
       },
     }, {
       onError: (message) => {
         showToast("Error", message, { position: "top-center", type: "error" });
+      },
+      onSuccess: async () => {
+        await handlerGetTable();
+        showToast("Success", "Transaccion creada", { position: "top-center", type: "success" });
       }
     });
   };

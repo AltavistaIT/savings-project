@@ -1,23 +1,48 @@
 import {
   ConfigGet200Response,
+  CreateTableModel,
   CreateTransactionModel,
   ErrorResponse,
   HTTPMethod,
-  TablesIdGet200Response,
+  TablesGet200Response,
+  TablesPost200Response,
   TransactionsPost200Response,
 } from "@/api";
+import { TablesIdGet200Response } from "@/api/models/TablesIdGet200Response";
 
 interface ApiRoutesMap {
   getConfig: {
-    requestPayload: null;
+    body: null;
+    pathVariables: null;
+    queryParams: null;
     response: ConfigGet200Response;
   };
   getTable: {
-    requestPayload: null;
+    body: null;
+    pathVariables: { id: string };
+    queryParams: null;
     response: TablesIdGet200Response;
   };
+  getTableByParams: {
+    body: null;
+    pathVariables: null;
+    queryParams: {
+      user_id: number;
+      type_id: number;
+      month_year: string;
+    };
+    response: TablesGet200Response;
+  };
+  createTable: {
+    body: CreateTableModel;
+    pathVariables: null;
+    queryParams: null;
+    response: TablesPost200Response;
+  };
   createTransaction: {
-    requestPayload: CreateTransactionModel;
+    body: CreateTransactionModel;
+    pathVariables: null;
+    queryParams: null;
     response: TransactionsPost200Response;
   };
 }
@@ -25,20 +50,28 @@ interface ApiRoutesMap {
 const apiRoutesMap: Record<
   keyof ApiRoutesMap,
   {
-    path: (id?: string | number, query?: Record<string, string>) => string;
+    path: string;
     method: HTTPMethod;
   }
 > = {
   getConfig: {
-    path: () => "/config",
+    path: "/config",
     method: "GET",
   },
   getTable: {
-    path: (id) => `/tables/${id}`,
+    path: `/tables/:id`,
     method: "GET",
   },
+  getTableByParams: {
+    path: `/tables`,
+    method: "GET",
+  },
+  createTable: {
+    path: "/tables",
+    method: "POST",
+  },
   createTransaction: {
-    path: () => "/transactions",
+    path: "/transactions",
     method: "POST",
   },
 };
@@ -51,23 +84,26 @@ export class ApiRouteClient {
   async fetch<K extends keyof ApiRoutesMap>(
     service: K,
     params: {
-      id?: string | number;
-      queryParams?: Record<string, string>;
-      body?: ApiRoutesMap[K]["requestPayload"];
+      pathVariables?: ApiRoutesMap[K]["pathVariables"];
+      queryParams?: ApiRoutesMap[K]["queryParams"];
+      body?: ApiRoutesMap[K]["body"];
       options?: NextFetchRequestConfig & {
         headers?: Record<string, string>;
       };
     }
   ): Promise<ApiRoutesMap[K]["response"] & ErrorResponse> {
     const route = apiRoutesMap[service];
-
     if (!route) {
       throw new Error(`Service ${service} is not defined`);
     }
 
-    const path = route.path(params.id);
+    const rawPath = this.replacePathVariables(
+      route.path,
+      params.pathVariables ?? undefined
+    );
     const queryString = this.buildQueryString(params.queryParams);
-    const url = `${this.baseUrl}${path}${queryString}`;
+    const url = `${this.baseUrl}${rawPath}${queryString}`;
+    console.log("url", url);
 
     const response = await fetch(url, {
       method: route.method,
@@ -87,8 +123,26 @@ export class ApiRouteClient {
     return await response.json();
   }
 
-  private buildQueryString(queryParams?: Record<string, string>): string {
-    if (!queryParams || Object.keys(queryParams).length === 0) return "";
+  private replacePathVariables(
+    path: string,
+    pathVariables?: Record<string, string>
+  ): string {
+    if (!pathVariables) return path;
+
+    return path.replace(/:([a-zA-Z_]+)/g, (_, key) => {
+      const value = pathVariables[key];
+      if (!value) throw new Error(`Path variable "${key}" not provided`);
+      return encodeURIComponent(value);
+    });
+  }
+
+  private buildQueryString(
+    queryParams?: ApiRoutesMap[keyof ApiRoutesMap]["queryParams"]
+  ): string {
+    if (!queryParams || Object.keys(queryParams).length === 0) {
+      return "";
+    }
+
     const query = new URLSearchParams(
       Object.fromEntries(
         Object.entries(queryParams).map(([key, value]) => [

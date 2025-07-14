@@ -1,7 +1,7 @@
-import { ConfigAggregate } from "@/api";
+import { GetConfigResponse } from "@/api";
 
 interface LSObjectsMap {
-  config: ConfigAggregate;
+  config: GetConfigResponse;
 }
 
 export class LocalStorageService {
@@ -14,6 +14,16 @@ export class LocalStorageService {
 
   static getItem<K extends keyof LSObjectsMap>(key: K): LSObjectsMap[K] | null {
     const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : null;
+
+    if (!value) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(value);
+    } catch (error) {
+      console.warn("Error parsing local storage value", error);
+      return null;
+    }
   }
 }

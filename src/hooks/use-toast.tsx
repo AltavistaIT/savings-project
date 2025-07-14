@@ -1,22 +1,19 @@
+// hooks/use-toast.ts
 import { toast, ToasterProps } from "sonner";
-import { create } from "zustand";
 
 type ToastType = "default" | "success" | "error" | "warning" | "info";
+
 interface ToastOptions extends Partial<ToasterProps> {
   duration?: number;
   type?: ToastType;
 }
 
-interface ToastStore {
-  showToast: (
+export const useToast = () => {
+  const showToast = (
     title: string,
-    description?: string,
-    options?: ToastOptions
-  ) => void;
-}
-
-export const useToastStore = create<ToastStore>(() => ({
-  showToast: (title, description = "", options = {}) => {
+    description = "",
+    options: ToastOptions = {}
+  ) => {
     const { type = "default", ...rest } = options;
 
     const config = {
@@ -42,5 +39,7 @@ export const useToastStore = create<ToastStore>(() => ({
         toast(title, config);
         break;
     }
-  },
-}));
+  };
+
+  return { showToast };
+};

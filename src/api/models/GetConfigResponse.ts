@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { GetConfigDatesResponse } from './GetConfigDatesResponse';
+import {
+    GetConfigDatesResponseFromJSON,
+    GetConfigDatesResponseFromJSONTyped,
+    GetConfigDatesResponseToJSON,
+    GetConfigDatesResponseToJSONTyped,
+} from './GetConfigDatesResponse';
 import type { CurrencyEntity } from './CurrencyEntity';
 import {
     CurrencyEntityFromJSON,
@@ -31,35 +38,41 @@ import {
 /**
  * 
  * @export
- * @interface ConfigAggregate
+ * @interface GetConfigResponse
  */
-export interface ConfigAggregate {
+export interface GetConfigResponse {
     /**
      * 
      * @type {Array<CurrencyEntity>}
-     * @memberof ConfigAggregate
+     * @memberof GetConfigResponse
      */
     currencies?: Array<CurrencyEntity>;
     /**
      * 
      * @type {Array<TransactionTypeEntity>}
-     * @memberof ConfigAggregate
+     * @memberof GetConfigResponse
      */
     transaction_types?: Array<TransactionTypeEntity>;
+    /**
+     * 
+     * @type {GetConfigDatesResponse}
+     * @memberof GetConfigResponse
+     */
+    month_years?: GetConfigDatesResponse;
 }
 
 /**
- * Check if a given object implements the ConfigAggregate interface.
+ * Check if a given object implements the GetConfigResponse interface.
  */
-export function instanceOfConfigAggregate(value: object): value is ConfigAggregate {
+export function instanceOfGetConfigResponse(value: object): value is GetConfigResponse {
     return true;
 }
 
-export function ConfigAggregateFromJSON(json: any): ConfigAggregate {
-    return ConfigAggregateFromJSONTyped(json, false);
+export function GetConfigResponseFromJSON(json: any): GetConfigResponse {
+    return GetConfigResponseFromJSONTyped(json, false);
 }
 
-export function ConfigAggregateFromJSONTyped(json: any, ignoreDiscriminator: boolean): ConfigAggregate {
+export function GetConfigResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetConfigResponse {
     if (json == null) {
         return json;
     }
@@ -67,14 +80,15 @@ export function ConfigAggregateFromJSONTyped(json: any, ignoreDiscriminator: boo
         
         'currencies': json['currencies'] == null ? undefined : ((json['currencies'] as Array<any>).map(CurrencyEntityFromJSON)),
         'transaction_types': json['transaction_types'] == null ? undefined : ((json['transaction_types'] as Array<any>).map(TransactionTypeEntityFromJSON)),
+        'month_years': json['month_years'] == null ? undefined : GetConfigDatesResponseFromJSON(json['month_years']),
     };
 }
 
-export function ConfigAggregateToJSON(json: any): ConfigAggregate {
-    return ConfigAggregateToJSONTyped(json, false);
+export function GetConfigResponseToJSON(json: any): GetConfigResponse {
+    return GetConfigResponseToJSONTyped(json, false);
 }
 
-export function ConfigAggregateToJSONTyped(value?: ConfigAggregate | null, ignoreDiscriminator: boolean = false): any {
+export function GetConfigResponseToJSONTyped(value?: GetConfigResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -83,6 +97,7 @@ export function ConfigAggregateToJSONTyped(value?: ConfigAggregate | null, ignor
         
         'currencies': value['currencies'] == null ? undefined : ((value['currencies'] as Array<any>).map(CurrencyEntityToJSON)),
         'transaction_types': value['transaction_types'] == null ? undefined : ((value['transaction_types'] as Array<any>).map(TransactionTypeEntityToJSON)),
+        'month_years': GetConfigDatesResponseToJSON(value['month_years']),
     };
 }
 

@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ConfigAggregate } from './ConfigAggregate';
+import type { GetConfigResponse } from './GetConfigResponse';
 import {
-    ConfigAggregateFromJSON,
-    ConfigAggregateFromJSONTyped,
-    ConfigAggregateToJSON,
-    ConfigAggregateToJSONTyped,
-} from './ConfigAggregate';
+    GetConfigResponseFromJSON,
+    GetConfigResponseFromJSONTyped,
+    GetConfigResponseToJSON,
+    GetConfigResponseToJSONTyped,
+} from './GetConfigResponse';
 
 /**
  * 
@@ -41,10 +41,10 @@ export interface ConfigGet200Response {
     success?: boolean;
     /**
      * 
-     * @type {ConfigAggregate}
+     * @type {GetConfigResponse}
      * @memberof ConfigGet200Response
      */
-    data?: ConfigAggregate;
+    data?: GetConfigResponse;
 }
 
 /**
@@ -66,7 +66,7 @@ export function ConfigGet200ResponseFromJSONTyped(json: any, ignoreDiscriminator
         
         'message': json['message'] == null ? undefined : json['message'],
         'success': json['success'] == null ? undefined : json['success'],
-        'data': json['data'] == null ? undefined : ConfigAggregateFromJSON(json['data']),
+        'data': json['data'] == null ? undefined : GetConfigResponseFromJSON(json['data']),
     };
 }
 
@@ -83,7 +83,7 @@ export function ConfigGet200ResponseToJSONTyped(value?: ConfigGet200Response | n
         
         'message': value['message'],
         'success': value['success'],
-        'data': ConfigAggregateToJSON(value['data']),
+        'data': GetConfigResponseToJSON(value['data']),
     };
 }
 

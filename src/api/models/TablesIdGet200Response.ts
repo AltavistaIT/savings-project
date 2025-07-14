@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { TableWithTransactionsAggregate } from './TableWithTransactionsAggregate';
+import type { GetTableByIdResponse } from './GetTableByIdResponse';
 import {
-    TableWithTransactionsAggregateFromJSON,
-    TableWithTransactionsAggregateFromJSONTyped,
-    TableWithTransactionsAggregateToJSON,
-    TableWithTransactionsAggregateToJSONTyped,
-} from './TableWithTransactionsAggregate';
+    GetTableByIdResponseFromJSON,
+    GetTableByIdResponseFromJSONTyped,
+    GetTableByIdResponseToJSON,
+    GetTableByIdResponseToJSONTyped,
+} from './GetTableByIdResponse';
 
 /**
  * 
@@ -41,10 +41,10 @@ export interface TablesIdGet200Response {
     success?: boolean;
     /**
      * 
-     * @type {TableWithTransactionsAggregate}
+     * @type {GetTableByIdResponse}
      * @memberof TablesIdGet200Response
      */
-    data?: TableWithTransactionsAggregate;
+    data?: GetTableByIdResponse;
 }
 
 /**
@@ -66,7 +66,7 @@ export function TablesIdGet200ResponseFromJSONTyped(json: any, ignoreDiscriminat
         
         'message': json['message'] == null ? undefined : json['message'],
         'success': json['success'] == null ? undefined : json['success'],
-        'data': json['data'] == null ? undefined : TableWithTransactionsAggregateFromJSON(json['data']),
+        'data': json['data'] == null ? undefined : GetTableByIdResponseFromJSON(json['data']),
     };
 }
 
@@ -83,7 +83,7 @@ export function TablesIdGet200ResponseToJSONTyped(value?: TablesIdGet200Response
         
         'message': value['message'],
         'success': value['success'],
-        'data': TableWithTransactionsAggregateToJSON(value['data']),
+        'data': GetTableByIdResponseToJSON(value['data']),
     };
 }
 

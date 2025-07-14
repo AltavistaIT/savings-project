@@ -17,7 +17,7 @@ import * as runtime from '../runtime';
 import type {
   CreateTableModel,
   ErrorResponse,
-  TablesIdGet200Response,
+  TablesGet200Response,
   TablesPost200Response,
 } from '../models/index';
 import {
@@ -25,11 +25,17 @@ import {
     CreateTableModelToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
-    TablesIdGet200ResponseFromJSON,
-    TablesIdGet200ResponseToJSON,
+    TablesGet200ResponseFromJSON,
+    TablesGet200ResponseToJSON,
     TablesPost200ResponseFromJSON,
     TablesPost200ResponseToJSON,
 } from '../models/index';
+
+export interface TablesGetRequest {
+    userId: number;
+    typeId: number;
+    monthYear: string;
+}
 
 export interface TablesIdGetRequest {
     id: number;
@@ -45,9 +51,68 @@ export interface TablesPostRequest {
 export class TablesApi extends runtime.BaseAPI {
 
     /**
+     * Get table by parameters
+     */
+    async tablesGetRaw(requestParameters: TablesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TablesGet200Response>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling tablesGet().'
+            );
+        }
+
+        if (requestParameters['typeId'] == null) {
+            throw new runtime.RequiredError(
+                'typeId',
+                'Required parameter "typeId" was null or undefined when calling tablesGet().'
+            );
+        }
+
+        if (requestParameters['monthYear'] == null) {
+            throw new runtime.RequiredError(
+                'monthYear',
+                'Required parameter "monthYear" was null or undefined when calling tablesGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['userId'] != null) {
+            queryParameters['user_id'] = requestParameters['userId'];
+        }
+
+        if (requestParameters['typeId'] != null) {
+            queryParameters['type_id'] = requestParameters['typeId'];
+        }
+
+        if (requestParameters['monthYear'] != null) {
+            queryParameters['month_year'] = requestParameters['monthYear'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/tables`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TablesGet200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Get table by parameters
+     */
+    async tablesGet(requestParameters: TablesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TablesGet200Response> {
+        const response = await this.tablesGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get table by id
      */
-    async tablesIdGetRaw(requestParameters: TablesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TablesIdGet200Response>> {
+    async tablesIdGetRaw(requestParameters: TablesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TablesGet200Response>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -66,13 +131,13 @@ export class TablesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TablesIdGet200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TablesGet200ResponseFromJSON(jsonValue));
     }
 
     /**
      * Get table by id
      */
-    async tablesIdGet(requestParameters: TablesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TablesIdGet200Response> {
+    async tablesIdGet(requestParameters: TablesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TablesGet200Response> {
         const response = await this.tablesIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }

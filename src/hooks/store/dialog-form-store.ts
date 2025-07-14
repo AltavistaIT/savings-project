@@ -1,20 +1,17 @@
 import { create } from "zustand";
 import * as z from "zod";
-import { useToastStore } from "./toast-store";
-import { toast } from "sonner";
 import { ApiRouteClient } from "@/services/api-route-client";
+import { useTableStore } from "./table-store";
 
 type FormFieldType = "text" | "number" | "select" | "hidden";
+type FormAction = "create-tx" | "update-tx";
 export type FormField = {
   name: string;
   label: string;
   type: FormFieldType;
-  validation: z.ZodTypeAny;
+  validation?: z.ZodTypeAny;
   options?: Array<{ label: string; value: string | number }>;
 };
-
-type FormAction = "create" | "update";
-
 type DialogFormCallbacks = {
   onSuccess?: () => void;
   onError?: (message: string) => void;
@@ -46,7 +43,7 @@ export const useDialogFormStore = create<DialogFormState>((set, get) => ({
     description: "",
     fields: [],
     initialValues: {},
-    action: "create",
+    action: "create-tx",
   },
   openDialog: (config, callbacks) => {
     set({ isDialogOpen: true, formConfig: config, callbacks });
@@ -56,7 +53,28 @@ export const useDialogFormStore = create<DialogFormState>((set, get) => ({
     const state = get();
     const apiRouteClient = new ApiRouteClient();
     switch (state.formConfig.action) {
-      case "create":
+      case "create-tx":
+        console.log("data", data);
+        if (!data.table_id) {
+          console.log("creating table");
+          const tableTypeid = useTableStore.getState().typeId;
+          const monthYear = useTableStore.getState().monthYear;
+          console.log({ tableTypeid, monthYear });
+          const response = await apiRouteClient.fetch("createTable", {
+            body: {
+              month_year: monthYear,
+              user_id: 1,
+              type_id: tableTypeid,
+            },
+          });
+
+          if (!response.success || !response.data) {
+            state.callbacks?.onError?.(response.message || "");
+            return;
+          }
+          data.table_id = response.data.id;
+        }
+
         const response = await apiRouteClient.fetch("createTransaction", {
           body: {
             ...data,
@@ -71,7 +89,7 @@ export const useDialogFormStore = create<DialogFormState>((set, get) => ({
           set({ isDialogOpen: false });
         }
         break;
-      case "update":
+      case "update-tx":
         return { isDialogOpen: false };
     }
   },

@@ -31,35 +31,35 @@ import {
 /**
  * 
  * @export
- * @interface TableWithTransactionsAggregate
+ * @interface GetTableByIdResponse
  */
-export interface TableWithTransactionsAggregate {
+export interface GetTableByIdResponse {
     /**
      * 
      * @type {TableEntity}
-     * @memberof TableWithTransactionsAggregate
+     * @memberof GetTableByIdResponse
      */
     table?: TableEntity;
     /**
      * 
      * @type {Array<TransactionEntity>}
-     * @memberof TableWithTransactionsAggregate
+     * @memberof GetTableByIdResponse
      */
     transactions?: Array<TransactionEntity>;
 }
 
 /**
- * Check if a given object implements the TableWithTransactionsAggregate interface.
+ * Check if a given object implements the GetTableByIdResponse interface.
  */
-export function instanceOfTableWithTransactionsAggregate(value: object): value is TableWithTransactionsAggregate {
+export function instanceOfGetTableByIdResponse(value: object): value is GetTableByIdResponse {
     return true;
 }
 
-export function TableWithTransactionsAggregateFromJSON(json: any): TableWithTransactionsAggregate {
-    return TableWithTransactionsAggregateFromJSONTyped(json, false);
+export function GetTableByIdResponseFromJSON(json: any): GetTableByIdResponse {
+    return GetTableByIdResponseFromJSONTyped(json, false);
 }
 
-export function TableWithTransactionsAggregateFromJSONTyped(json: any, ignoreDiscriminator: boolean): TableWithTransactionsAggregate {
+export function GetTableByIdResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetTableByIdResponse {
     if (json == null) {
         return json;
     }
@@ -70,11 +70,11 @@ export function TableWithTransactionsAggregateFromJSONTyped(json: any, ignoreDis
     };
 }
 
-export function TableWithTransactionsAggregateToJSON(json: any): TableWithTransactionsAggregate {
-    return TableWithTransactionsAggregateToJSONTyped(json, false);
+export function GetTableByIdResponseToJSON(json: any): GetTableByIdResponse {
+    return GetTableByIdResponseToJSONTyped(json, false);
 }
 
-export function TableWithTransactionsAggregateToJSONTyped(value?: TableWithTransactionsAggregate | null, ignoreDiscriminator: boolean = false): any {
+export function GetTableByIdResponseToJSONTyped(value?: GetTableByIdResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

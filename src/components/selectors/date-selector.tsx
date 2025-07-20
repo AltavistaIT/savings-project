@@ -6,15 +6,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { useEffect, useState } from "react";
 import { LocalStorageService } from "@/services/local-storage-service";
 import { useTableStore } from "@/hooks/store/table-store";
+import { MONTH_NAMES } from "@/domain/constants";
 
 interface MonthOption {
   name: string,
   value: number
 }
-
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-]
 
 export default function DateSelector() {
   const [months, setMonths] = useState<MonthOption[]>([])
@@ -33,7 +30,6 @@ export default function DateSelector() {
     const { months, years } = config.month_years
 
     if (!months || !years) {
-      console.log('no')
       return
     }
 
@@ -50,16 +46,27 @@ export default function DateSelector() {
   }, [])
 
   useEffect(() => {
-    console.log({ selectedMonth, selectedYear })
     if (selectedMonth && selectedYear) {
       const monthYear = `${selectedYear}-${selectedMonth < 10 ? `0${selectedMonth}` : selectedMonth}`
       setMonthYear(monthYear)
     }
   }, [selectedMonth, selectedYear])
 
+  const handlePrevMonth = () => {
+    const prevMonth = selectedMonth && selectedMonth > 1 ? selectedMonth - 1 : 12
+    setSelectedMonth(prevMonth)
+    if (prevMonth === 12) setSelectedYear(selectedYear! - 1)
+  }
+
+  const handleNextMonth = () => {
+    const nextMonth = selectedMonth && selectedMonth < 12 ? selectedMonth + 1 : 1
+    setSelectedMonth(nextMonth)
+    if (nextMonth === 1) setSelectedYear(selectedYear! + 1)
+  }
+
   return (
     <div className="flex items-center space-x-4">
-      <Button variant="outline" size="icon">
+      <Button variant="outline" size="icon" onClick={handlePrevMonth}>
         <ChevronLeft className="h-5 w-5" />
       </Button>
       <div className="flex items-center space-x-2">
@@ -88,7 +95,7 @@ export default function DateSelector() {
           </SelectContent>
         </Select>
       </div>
-      <Button variant="outline" size="icon">
+      <Button variant="outline" size="icon" onClick={handleNextMonth}>
         <ChevronRight className="h-5 w-5" />
       </Button>
     </div>

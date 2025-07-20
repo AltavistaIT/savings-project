@@ -14,17 +14,18 @@ import { Column, MappedTransactions } from "./types";
 import { TableEntity } from "@/api";
 
 interface DefaultTransactionsTableProps {
+  title: string
   columns: Column[];
   transactions: MappedTransactions[]
   table: TableEntity
   handleCreateTransaction: () => void
 }
 
-export const DefaultTransactionsTable = ({ columns, transactions, table, handleCreateTransaction }: DefaultTransactionsTableProps) => {
+export const GenericTransactionsTable = ({ title, columns, transactions, table, handleCreateTransaction }: DefaultTransactionsTableProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Gastos</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>

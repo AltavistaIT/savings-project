@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateTransactionModel,
+  CreateTransactionDto,
   ErrorResponse,
   TransactionsPost200Response,
 } from '../models/index';
 import {
-    CreateTransactionModelFromJSON,
-    CreateTransactionModelToJSON,
+    CreateTransactionDtoFromJSON,
+    CreateTransactionDtoToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
     TransactionsPost200ResponseFromJSON,
@@ -29,7 +29,7 @@ import {
 } from '../models/index';
 
 export interface TransactionsPostRequest {
-    createTransactionModel: CreateTransactionModel;
+    createTransactionDto: CreateTransactionDto;
 }
 
 /**
@@ -41,10 +41,10 @@ export class TransactionsApi extends runtime.BaseAPI {
      * Create a new transaction
      */
     async transactionsPostRaw(requestParameters: TransactionsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TransactionsPost200Response>> {
-        if (requestParameters['createTransactionModel'] == null) {
+        if (requestParameters['createTransactionDto'] == null) {
             throw new runtime.RequiredError(
-                'createTransactionModel',
-                'Required parameter "createTransactionModel" was null or undefined when calling transactionsPost().'
+                'createTransactionDto',
+                'Required parameter "createTransactionDto" was null or undefined when calling transactionsPost().'
             );
         }
 
@@ -59,7 +59,7 @@ export class TransactionsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateTransactionModelToJSON(requestParameters['createTransactionModel']),
+            body: CreateTransactionDtoToJSON(requestParameters['createTransactionDto']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TransactionsPost200ResponseFromJSON(jsonValue));

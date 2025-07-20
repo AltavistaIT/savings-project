@@ -1,7 +1,7 @@
 import {
   ConfigGet200Response,
-  CreateTableModel,
-  CreateTransactionModel,
+  CreateTableDto,
+  CreateTransactionDto,
   ErrorResponse,
   HTTPMethod,
   TablesGet200Response,
@@ -34,13 +34,13 @@ interface ApiRoutesMap {
     response: TablesGet200Response;
   };
   createTable: {
-    body: CreateTableModel;
+    body: CreateTableDto;
     pathVariables: null;
     queryParams: null;
     response: TablesPost200Response;
   };
   createTransaction: {
-    body: CreateTransactionModel;
+    body: CreateTransactionDto;
     pathVariables: null;
     queryParams: null;
     response: TransactionsPost200Response;

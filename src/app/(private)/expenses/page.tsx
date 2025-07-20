@@ -1,4 +1,4 @@
-import { ExpensesPage } from "@/modules/expenses/page"
+import { ExpensesPage } from "@/views/reports/expenses"
 
 const Expenses = () => {
   return (

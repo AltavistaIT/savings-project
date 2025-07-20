@@ -1,6 +1,6 @@
 "use client";
 
-import { ApiRouteClient } from "@/services/api-route-client";
+import { ApiRouteClient } from "@/services/api/api-route-client";
 import { LocalStorageService } from "@/services/local-storage-service";
 
 export default function Config() {

@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { TableTypeEntity } from './TableTypeEntity';
+import {
+    TableTypeEntityFromJSON,
+    TableTypeEntityFromJSONTyped,
+    TableTypeEntityToJSON,
+    TableTypeEntityToJSONTyped,
+} from './TableTypeEntity';
 import type { GetConfigDatesResponse } from './GetConfigDatesResponse';
 import {
     GetConfigDatesResponseFromJSON,
@@ -59,6 +66,12 @@ export interface GetConfigResponse {
      * @memberof GetConfigResponse
      */
     month_years?: GetConfigDatesResponse;
+    /**
+     * 
+     * @type {Array<TableTypeEntity>}
+     * @memberof GetConfigResponse
+     */
+    table_types?: Array<TableTypeEntity>;
 }
 
 /**
@@ -81,6 +94,7 @@ export function GetConfigResponseFromJSONTyped(json: any, ignoreDiscriminator: b
         'currencies': json['currencies'] == null ? undefined : ((json['currencies'] as Array<any>).map(CurrencyEntityFromJSON)),
         'transaction_types': json['transaction_types'] == null ? undefined : ((json['transaction_types'] as Array<any>).map(TransactionTypeEntityFromJSON)),
         'month_years': json['month_years'] == null ? undefined : GetConfigDatesResponseFromJSON(json['month_years']),
+        'table_types': json['table_types'] == null ? undefined : ((json['table_types'] as Array<any>).map(TableTypeEntityFromJSON)),
     };
 }
 
@@ -98,6 +112,7 @@ export function GetConfigResponseToJSONTyped(value?: GetConfigResponse | null, i
         'currencies': value['currencies'] == null ? undefined : ((value['currencies'] as Array<any>).map(CurrencyEntityToJSON)),
         'transaction_types': value['transaction_types'] == null ? undefined : ((value['transaction_types'] as Array<any>).map(TransactionTypeEntityToJSON)),
         'month_years': GetConfigDatesResponseToJSON(value['month_years']),
+        'table_types': value['table_types'] == null ? undefined : ((value['table_types'] as Array<any>).map(TableTypeEntityToJSON)),
     };
 }
 

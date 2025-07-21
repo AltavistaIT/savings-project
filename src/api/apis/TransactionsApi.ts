@@ -18,6 +18,7 @@ import type {
   CreateTransactionDto,
   ErrorResponse,
   TransactionsPost200Response,
+  UpdateTransactionDto,
 } from '../models/index';
 import {
     CreateTransactionDtoFromJSON,
@@ -26,7 +27,14 @@ import {
     ErrorResponseToJSON,
     TransactionsPost200ResponseFromJSON,
     TransactionsPost200ResponseToJSON,
+    UpdateTransactionDtoFromJSON,
+    UpdateTransactionDtoToJSON,
 } from '../models/index';
+
+export interface TransactionsIdPatchRequest {
+    id: number;
+    updateTransactionDto: UpdateTransactionDto;
+}
 
 export interface TransactionsPostRequest {
     createTransactionDto: CreateTransactionDto;
@@ -36,6 +44,49 @@ export interface TransactionsPostRequest {
  * 
  */
 export class TransactionsApi extends runtime.BaseAPI {
+
+    /**
+     * Update a transaction
+     */
+    async transactionsIdPatchRaw(requestParameters: TransactionsIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TransactionsPost200Response>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling transactionsIdPatch().'
+            );
+        }
+
+        if (requestParameters['updateTransactionDto'] == null) {
+            throw new runtime.RequiredError(
+                'updateTransactionDto',
+                'Required parameter "updateTransactionDto" was null or undefined when calling transactionsIdPatch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/transactions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateTransactionDtoToJSON(requestParameters['updateTransactionDto']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionsPost200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a transaction
+     */
+    async transactionsIdPatch(requestParameters: TransactionsIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TransactionsPost200Response> {
+        const response = await this.transactionsIdPatchRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Create a new transaction

@@ -52,16 +52,20 @@ export const useTableStore = create<TableState>((set, get) => ({
       return;
     }
 
-    const { table, transactions } = response.data!;
+    const { table, transactions } = response.data;
 
-    const mappedTransactions = transactions?.map((tx) => {
-      const percentage =
-        tx.amount && table?.amount ? (tx.amount / table.amount) * 100 : 0;
-      return {
-        ...tx,
-        percentage,
-      };
+    let amount = 0;
+    const mappedTransactions = transactions.map((tx) => {
+      amount += tx.amount;
+      return { ...tx };
     });
-    set({ table, transactions: mappedTransactions });
+    table.amount = amount;
+
+    const finalTransactions = mappedTransactions.map((tx) => ({
+      ...tx,
+      percentage: amount > 0 ? (tx.amount / amount) * 100 : 0,
+    }));
+
+    set({ table, transactions: finalTransactions });
   },
 }));

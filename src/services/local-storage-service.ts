@@ -1,7 +1,7 @@
 import { GetConfigResponse } from "@/api";
 
 interface LSObjectsMap {
-  config: GetConfigResponse;
+  config: Required<GetConfigResponse>;
 }
 
 export class LocalStorageService {

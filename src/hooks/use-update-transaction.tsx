@@ -3,10 +3,33 @@ import { FormField, useDialogFormStore } from "./store/dialog-form-store";
 import { useTableStore } from "./store/table-store";
 import { z } from "zod";
 import { MappedTransactions } from "@/components/tables/types";
+import { ApiRouteClient } from "@/services/api/api-route-client";
+import { toast } from "sonner";
 
 export default function useUpdateTransaction(rowData: MappedTransactions) {
-  const { openDialog } = useDialogFormStore();
-  const { tableTypeId } = useTableStore()
+  const { openDialog, closeDialog } = useDialogFormStore();
+  const { tableTypeId, fetchTable } = useTableStore();
+  const apiRouteClient = new ApiRouteClient();
+
+  const updateTransaction = async (payload: Record<string, any>) => {
+    const response = await apiRouteClient.fetch("updateTransaction", {
+      body: {
+        amount: payload.amount,
+        description: payload.description,
+        type_id: payload.type,
+      },
+      pathVariables: { id: String(rowData.id) },
+    });
+
+    if (!response.success) {
+      toast.error("An unexpected error occurred. Please try again.");
+      return
+    }
+
+    await fetchTable();
+    closeDialog();
+    toast.success("Transaction updated successfully");
+  };
 
   const openDialogForm = () => {
     const configData = LocalStorageService.getItem("config");
@@ -60,12 +83,11 @@ export default function useUpdateTransaction(rowData: MappedTransactions) {
     openDialog({
       title: "Update Transaction",
       fields: transactionFields,
-      action: "update-tx",
-      initialValues: transactionDefaultValues
-    });
-  }
+      initialValues: transactionDefaultValues,
+    }, updateTransaction);
+  };
 
   return {
-    openDialogForm
-  }
+    openDialogForm,
+  };
 }

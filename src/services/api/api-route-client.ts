@@ -7,8 +7,10 @@ import {
   TablesGet200Response,
   TablesPost200Response,
   TransactionsPost200Response,
+  UpdateTransactionDto,
 } from "@/api";
 import { TablesIdGet200Response } from "@/api/models/TablesIdGet200Response";
+import { DeepRequired } from "@/domain/types/utils";
 
 interface ApiRoutesMap {
   getConfig: {
@@ -45,6 +47,12 @@ interface ApiRoutesMap {
     queryParams: null;
     response: TransactionsPost200Response;
   };
+  updateTransaction: {
+    body: UpdateTransactionDto;
+    pathVariables: { id: string };
+    queryParams: null;
+    response: TransactionsPost200Response;
+  };
 }
 
 const apiRoutesMap: Record<
@@ -74,6 +82,10 @@ const apiRoutesMap: Record<
     path: "/transactions",
     method: "POST",
   },
+  updateTransaction: {
+    path: "/transactions/:id",
+    method: "PATCH",
+  },
 };
 
 export class ApiRouteClient {
@@ -91,7 +103,7 @@ export class ApiRouteClient {
         headers?: Record<string, string>;
       };
     }
-  ): Promise<ApiRoutesMap[K]["response"] & ErrorResponse> {
+  ): Promise<DeepRequired<ApiRoutesMap[K]["response"]>> {
     const route = apiRoutesMap[service];
     if (!route) {
       throw new Error(`Service ${service} is not defined`);

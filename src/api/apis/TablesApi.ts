@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateTableModel,
+  CreateTableDto,
   ErrorResponse,
   TablesGet200Response,
   TablesPost200Response,
 } from '../models/index';
 import {
-    CreateTableModelFromJSON,
-    CreateTableModelToJSON,
+    CreateTableDtoFromJSON,
+    CreateTableDtoToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
     TablesGet200ResponseFromJSON,
@@ -42,7 +42,7 @@ export interface TablesIdGetRequest {
 }
 
 export interface TablesPostRequest {
-    createTableModel: CreateTableModel;
+    createTableDto: CreateTableDto;
 }
 
 /**
@@ -146,10 +146,10 @@ export class TablesApi extends runtime.BaseAPI {
      * Create a new table
      */
     async tablesPostRaw(requestParameters: TablesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TablesPost200Response>> {
-        if (requestParameters['createTableModel'] == null) {
+        if (requestParameters['createTableDto'] == null) {
             throw new runtime.RequiredError(
-                'createTableModel',
-                'Required parameter "createTableModel" was null or undefined when calling tablesPost().'
+                'createTableDto',
+                'Required parameter "createTableDto" was null or undefined when calling tablesPost().'
             );
         }
 
@@ -164,7 +164,7 @@ export class TablesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateTableModelToJSON(requestParameters['createTableModel']),
+            body: CreateTableDtoToJSON(requestParameters['createTableDto']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TablesPost200ResponseFromJSON(jsonValue));

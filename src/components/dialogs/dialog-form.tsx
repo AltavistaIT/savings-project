@@ -58,7 +58,11 @@ export function DialogForm<T extends Record<string, any>>() {
         </DialogHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleSubmit)}
+            onSubmit={form.handleSubmit((data) => {
+              if (handleSubmit) {
+                handleSubmit(data)
+              }
+            })}
             className="space-y-4"
           >
             {formConfig.fields.map((field) => (

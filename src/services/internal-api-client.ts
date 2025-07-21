@@ -26,14 +26,6 @@ export class InternalAPIClient {
       ...options,
     };
 
-    console.log("Request:", {
-      url,
-      method,
-      headers,
-      body: requestOptions.body,
-      options,
-    });
-
     try {
       const response = await fetch(url, requestOptions);
 

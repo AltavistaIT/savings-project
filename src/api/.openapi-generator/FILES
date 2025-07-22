@@ -20,6 +20,7 @@ models/TablesGet200Response.ts
 models/TablesPost200Response.ts
 models/TransactionEntity.ts
 models/TransactionTypeEntity.ts
+models/TransactionsIdDelete200Response.ts
 models/TransactionsPost200Response.ts
 models/UpdateTransactionDto.ts
 models/index.ts

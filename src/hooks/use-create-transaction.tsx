@@ -8,7 +8,6 @@ import { ApiRouteClient } from "@/services/api/api-route-client";
 /**
  * Creates a new transaction based on the form data and the table type selected.
  * If the table doesn't exist, it creates a new one.
- * @returns {function} a function to open the dialog form.
  */
 export default function useCreateTransaction() {
   const { table, tableTypeId, monthYear, fetchTable } = useTableStore();
@@ -52,8 +51,8 @@ export default function useCreateTransaction() {
     }
 
     await fetchTable();
-    closeDialog();
     toast.success("Transaction created successfully");
+    closeDialog();
   };
 
   const openDialogForm = () => {

@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   CreateTransactionDto,
   ErrorResponse,
+  TransactionsIdDelete200Response,
   TransactionsPost200Response,
   UpdateTransactionDto,
 } from '../models/index';
@@ -25,11 +26,17 @@ import {
     CreateTransactionDtoToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    TransactionsIdDelete200ResponseFromJSON,
+    TransactionsIdDelete200ResponseToJSON,
     TransactionsPost200ResponseFromJSON,
     TransactionsPost200ResponseToJSON,
     UpdateTransactionDtoFromJSON,
     UpdateTransactionDtoToJSON,
 } from '../models/index';
+
+export interface TransactionsIdDeleteRequest {
+    id: number;
+}
 
 export interface TransactionsIdPatchRequest {
     id: number;
@@ -44,6 +51,39 @@ export interface TransactionsPostRequest {
  * 
  */
 export class TransactionsApi extends runtime.BaseAPI {
+
+    /**
+     * Delete a transaction
+     */
+    async transactionsIdDeleteRaw(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TransactionsIdDelete200Response>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling transactionsIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/transactions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionsIdDelete200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete a transaction
+     */
+    async transactionsIdDelete(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TransactionsIdDelete200Response> {
+        const response = await this.transactionsIdDeleteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Update a transaction

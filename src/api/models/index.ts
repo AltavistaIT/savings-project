@@ -15,5 +15,6 @@ export * from './TablesGet200Response';
 export * from './TablesPost200Response';
 export * from './TransactionEntity';
 export * from './TransactionTypeEntity';
+export * from './TransactionsIdDelete200Response';
 export * from './TransactionsPost200Response';
 export * from './UpdateTransactionDto';

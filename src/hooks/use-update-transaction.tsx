@@ -25,10 +25,9 @@ export default function useUpdateTransaction(rowData: MappedTransactions) {
       toast.error("An unexpected error occurred. Please try again.");
       return
     }
-
     await fetchTable();
-    closeDialog();
     toast.success("Transaction updated successfully");
+    closeDialog();
   };
 
   const openDialogForm = () => {

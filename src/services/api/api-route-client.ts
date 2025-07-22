@@ -2,10 +2,10 @@ import {
   ConfigGet200Response,
   CreateTableDto,
   CreateTransactionDto,
-  ErrorResponse,
   HTTPMethod,
   TablesGet200Response,
   TablesPost200Response,
+  TransactionsIdDelete200Response,
   TransactionsPost200Response,
   UpdateTransactionDto,
 } from "@/api";
@@ -53,6 +53,12 @@ interface ApiRoutesMap {
     queryParams: null;
     response: TransactionsPost200Response;
   };
+  deleteTransaction: {
+    body: null;
+    pathVariables: { id: string };
+    queryParams: null;
+    response: TransactionsIdDelete200Response;
+  };
 }
 
 const apiRoutesMap: Record<
@@ -85,6 +91,10 @@ const apiRoutesMap: Record<
   updateTransaction: {
     path: "/transactions/:id",
     method: "PATCH",
+  },
+  deleteTransaction: {
+    path: "/transactions/:id",
+    method: "DELETE",
   },
 };
 

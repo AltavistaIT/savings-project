@@ -1,5 +1,6 @@
 import {
   ErrorResponse,
+  TransactionsIdDelete200Response,
   TransactionsIdPatchRequest,
   TransactionsPost200Response,
   UpdateTransactionDto,
@@ -17,5 +18,16 @@ export async function PATCH(
   const result = await new InternalAPIClient().request<
     TransactionsPost200Response | ErrorResponse
   >(`/transactions/${id}`, "PATCH", payload);
+  return NextResponse.json(result);
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const result = await new InternalAPIClient().request<
+    TransactionsIdDelete200Response | ErrorResponse
+  >(`/transactions/${id}`, "DELETE");
   return NextResponse.json(result);
 }

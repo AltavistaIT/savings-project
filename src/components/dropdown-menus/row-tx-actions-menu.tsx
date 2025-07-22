@@ -6,12 +6,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
-import * as z from "zod";
-import { FormField, useDialogFormStore } from "@/hooks/store/dialog-form-store";
 import { MappedTransactions } from "../tables/types";
-import { LocalStorageService } from "@/services/local-storage-service";
-import { useTableStore } from "@/hooks/store/table-store";
 import useUpdateTransaction from "@/hooks/use-update-transaction";
+import { ApiRouteClient } from "@/services/api/api-route-client";
+import { toast } from "sonner";
+import { useTableStore } from "@/hooks/store/table-store";
 
 type RowTxActionsMenuProps = {
   rowData: MappedTransactions;
@@ -21,10 +20,25 @@ export function RowTxActionsMenu({
   rowData,
 }: RowTxActionsMenuProps) {
   const { openDialogForm } = useUpdateTransaction(rowData);
+  const { fetchTable } = useTableStore()
+  const apiRouteClient = new ApiRouteClient();
 
   const handleEditOpen = () => {
     openDialogForm();
   };
+
+  const handleDeleteTx = async () => {
+    const response = await apiRouteClient.fetch("deleteTransaction", {
+      pathVariables: { id: String(rowData.id) }
+    })
+
+    if (!response.success) {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
+
+    toast.success("Transaction deleted successfully");
+    await fetchTable();
+  }
 
   return (
     <>
@@ -39,7 +53,7 @@ export function RowTxActionsMenu({
           <DropdownMenuItem onSelect={() => handleEditOpen()}>
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => { }}>Delete</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => handleDeleteTx()}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

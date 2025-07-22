@@ -37,6 +37,12 @@ export interface UpdateTransactionDto {
      * @memberof UpdateTransactionDto
      */
     amount?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTransactionDto
+     */
+    date?: string;
 }
 
 /**
@@ -59,6 +65,7 @@ export function UpdateTransactionDtoFromJSONTyped(json: any, ignoreDiscriminator
         'description': json['description'] == null ? undefined : json['description'],
         'type_id': json['type_id'] == null ? undefined : json['type_id'],
         'amount': json['amount'] == null ? undefined : json['amount'],
+        'date': json['date'] == null ? undefined : json['date'],
     };
 }
 
@@ -76,6 +83,7 @@ export function UpdateTransactionDtoToJSONTyped(value?: UpdateTransactionDto | n
         'description': value['description'],
         'type_id': value['type_id'],
         'amount': value['amount'],
+        'date': value['date'],
     };
 }
 

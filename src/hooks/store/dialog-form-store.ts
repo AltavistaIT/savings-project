@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import * as z from "zod";
-import { ApiRouteClient } from "@/services/api/api-route-client";
 
-type FormFieldType = "text" | "number" | "select" | "hidden";
+type FormFieldType = "text" | "number" | "select" | "hidden" | "date";
 export type FormField = {
   name: string;
   label: string;
@@ -19,10 +18,10 @@ interface DialogFormState {
     fields: FormField[];
     initialValues: Record<string, string | number | undefined>;
   };
-  handleSubmit?: (data: Record<string, any>) => void;
+  handleSubmit?: (data: Record<string, any>) => Promise<void>;
   openDialog: (
     config: DialogFormState["formConfig"],
-    submitHandler: (data: Record<string, any>) => void
+    submitHandler: (data: Record<string, any>) => Promise<void>
   ) => void;
   closeDialog: () => void;
 }
@@ -34,7 +33,6 @@ export const useDialogFormStore = create<DialogFormState>((set, get) => ({
     description: "",
     fields: [],
     initialValues: {},
-    action: "create-tx",
   },
   handleSubmit: undefined,
   openDialog: (config, submitHandler) => {

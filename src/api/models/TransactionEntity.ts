@@ -45,6 +45,12 @@ export interface TransactionEntity {
     amount?: number;
     /**
      * 
+     * @type {string}
+     * @memberof TransactionEntity
+     */
+    date?: string;
+    /**
+     * 
      * @type {number}
      * @memberof TransactionEntity
      */
@@ -90,6 +96,7 @@ export function TransactionEntityFromJSONTyped(json: any, ignoreDiscriminator: b
         'description': json['description'] == null ? undefined : json['description'],
         'type_id': json['type_id'] == null ? undefined : json['type_id'],
         'amount': json['amount'] == null ? undefined : json['amount'],
+        'date': json['date'] == null ? undefined : json['date'],
         'currency_id': json['currency_id'] == null ? undefined : json['currency_id'],
         'status': json['status'] == null ? undefined : json['status'],
         'created_at': json['created_at'] == null ? undefined : json['created_at'],
@@ -112,6 +119,7 @@ export function TransactionEntityToJSONTyped(value?: TransactionEntity | null, i
         'description': value['description'],
         'type_id': value['type_id'],
         'amount': value['amount'],
+        'date': value['date'],
         'currency_id': value['currency_id'],
         'status': value['status'],
         'created_at': value['created_at'],

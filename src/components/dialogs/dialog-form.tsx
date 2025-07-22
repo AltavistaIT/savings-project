@@ -24,6 +24,11 @@ import { DefaultValues, Path, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDialogFormStore } from "@/hooks/store/dialog-form-store";
 import { useEffect } from "react";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "../ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 export function DialogForm<T extends Record<string, any>>() {
   const {
@@ -58,9 +63,9 @@ export function DialogForm<T extends Record<string, any>>() {
         </DialogHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((data) => {
+            onSubmit={form.handleSubmit(async (data) => {
               if (handleSubmit) {
-                handleSubmit(data)
+                await handleSubmit(data)
               }
             })}
             className="space-y-4"
@@ -89,6 +94,29 @@ export function DialogForm<T extends Record<string, any>>() {
                             </option>
                           ))}
                         </select>
+                      ) : field.type === "date" ? (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !formField.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {formField.value ? format(formField.value, "dd/MM/yyyy") : "Chose a date"}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Calendar
+                              mode="single"
+                              selected={formField.value}
+                              onSelect={formField.onChange}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
                       ) : (
                         <Input type={field.type} {...formField} />
                       )}
@@ -100,7 +128,9 @@ export function DialogForm<T extends Record<string, any>>() {
             ))}
 
             <DialogFooter>
-              <Button type="submit">Guardar</Button>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? "Saving..." : "Save changes"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

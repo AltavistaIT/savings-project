@@ -49,6 +49,12 @@ export interface CreateTransactionDto {
      * @memberof CreateTransactionDto
      */
     currency_id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTransactionDto
+     */
+    date?: string;
 }
 
 /**
@@ -73,6 +79,7 @@ export function CreateTransactionDtoFromJSONTyped(json: any, ignoreDiscriminator
         'type_id': json['type_id'] == null ? undefined : json['type_id'],
         'amount': json['amount'] == null ? undefined : json['amount'],
         'currency_id': json['currency_id'] == null ? undefined : json['currency_id'],
+        'date': json['date'] == null ? undefined : json['date'],
     };
 }
 
@@ -92,6 +99,7 @@ export function CreateTransactionDtoToJSONTyped(value?: CreateTransactionDto | n
         'type_id': value['type_id'],
         'amount': value['amount'],
         'currency_id': value['currency_id'],
+        'date': value['date'],
     };
 }
 

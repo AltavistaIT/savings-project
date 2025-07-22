@@ -17,6 +17,7 @@ export default function useUpdateTransaction(rowData: MappedTransactions) {
         amount: payload.amount,
         description: payload.description,
         type_id: payload.type,
+        date: payload.date,
       },
       pathVariables: { id: String(rowData.id) },
     });
@@ -71,12 +72,19 @@ export default function useUpdateTransaction(rowData: MappedTransactions) {
           .transform((value) => Number(value))
           .refine((value) => value > 0, "Debe ser mayor a 0"),
       },
+      {
+        name: "date",
+        label: "Date",
+        type: "date",
+        validation: z.date({ message: "Debe seleccionar una fecha" }),
+      },
     ];
 
     const transactionDefaultValues = {
       type: String(rowData.type_id) || "",
       description: rowData.description || "",
       amount: String(rowData.amount) || 0,
+      date: rowData.date || "",
     };
 
     openDialog({

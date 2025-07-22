@@ -22,37 +22,42 @@ export default function useCreateTransaction() {
    * @param {Record<string, any>} data - The transaction data containing details such as type_id and amount.
    */
   const createTransaction = async (data: Record<string, any>) => {
-    if (!data.table_id) {
-      const response = await apiRouteClient.fetch("createTable", {
+    try {
+      if (!data.table_id) {
+        const response = await apiRouteClient.fetch("createTable", {
+          body: {
+            month_year: monthYear,
+            user_id: 1,
+            type_id: tableTypeId,
+          },
+        });
+
+        if (!response.success || !response.data) {
+          toast.error("An unexpected error occurred. Please try again.");
+          return;
+        }
+        data.table_id = response.data.id;
+      }
+
+      const response = await apiRouteClient.fetch("createTransaction", {
         body: {
-          month_year: monthYear,
-          user_id: 1,
-          type_id: tableTypeId,
+          ...data,
+          type_id: Number(data.type_id),
+          amount: Number(data.amount),
         },
       });
-
-      if (!response.success || !response.data) {
+      if (!response.success) {
         toast.error("An unexpected error occurred. Please try again.");
         return;
       }
-      data.table_id = response.data.id;
-    }
 
-    const response = await apiRouteClient.fetch("createTransaction", {
-      body: {
-        ...data,
-        type_id: Number(data.type_id),
-        amount: Number(data.amount),
-      },
-    });
-    if (!response.success) {
+      await fetchTable();
+      toast.success("Transaction created successfully");
+      closeDialog();
+    } catch (error) {
       toast.error("An unexpected error occurred. Please try again.");
-      return;
+      throw error;
     }
-
-    await fetchTable();
-    toast.success("Transaction created successfully");
-    closeDialog();
   };
 
   const openDialogForm = () => {
@@ -100,6 +105,12 @@ export default function useCreateTransaction() {
           .min(1, "Debe ser mayor a 0")
           .transform((value) => Number(value))
           .refine((value) => value > 0, "Debe ser mayor a 0"),
+      },
+      {
+        name: "date",
+        label: "Date",
+        type: "date",
+        validation: z.date({ message: "Debe seleccionar una fecha" }),
       },
       {
         name: "currency_id",

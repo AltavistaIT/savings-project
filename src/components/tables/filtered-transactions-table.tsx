@@ -28,7 +28,7 @@ const columns: Column[] = [
   {
     header: "Date",
     accessor: (row) =>
-      row.created_at ? new Date(row.created_at).toLocaleDateString() : "-",
+      row.date ? new Date(row.date).toLocaleDateString("en-US", { timeZone: "UTC" }) : "-",
   },
 ];
 

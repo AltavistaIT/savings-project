@@ -23,7 +23,6 @@ export default function DateSelector() {
 
   useEffect(() => {
     const config = LocalStorageService.getItem("config")
-    console.log({ config })
     if (!config || !config.month_years) {
       return
     }
@@ -40,9 +39,15 @@ export default function DateSelector() {
     setMonths(parsedMonths)
     setYears(years)
 
-    if (parsedMonths.length) setSelectedMonth(parsedMonths[0].value)
-    if (years.length) setSelectedYear(years[0])
-    console.log({ parsedMonths, years })
+    const now = new Date()
+    const currentMonth = now.getMonth() + 1
+    const currentYear = now.getFullYear()
+
+    const validMonth = months.includes(currentMonth)
+    const validYear = years.includes(currentYear)
+
+    setSelectedMonth(validMonth ? currentMonth : parsedMonths[0].value)
+    setSelectedYear(validYear ? currentYear : years[0])
   }, [])
 
   useEffect(() => {

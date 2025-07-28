@@ -1,4 +1,4 @@
-import { ReportsMainPage } from "@/views/reports";
+import { ReportsMainPage } from "@/views/tables";
 
 const MainDashboard = () => {
   return (

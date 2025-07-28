@@ -1,4 +1,4 @@
-import { SavingsPage } from "@/views/reports/savings"
+import { SavingsPage } from "@/views/tables/savings"
 
 const Savings = () => {
   return (

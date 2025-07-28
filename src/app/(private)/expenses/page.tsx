@@ -1,4 +1,4 @@
-import { ExpensesPage } from "@/views/reports/expenses"
+import { ExpensesPage } from "@/views/tables/expenses"
 
 const Expenses = () => {
   return (

@@ -1,4 +1,4 @@
-import { InvoicesPage } from "@/views/reports/invoices"
+import { InvoicesPage } from "@/views/tables/invoices"
 
 const Invoices = () => {
   return (

@@ -4,7 +4,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupConte
 import { ChevronDown, ChevronRight, Home, LucideIcon, PieChart } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import SidebarProfile from "./sidebar-profile";
+import SidebarProfile from "@/components/sidebars/sidebar-profile";
 
 
 interface SubItem {

@@ -1,7 +1,8 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { HelpCircle, LogOut, Settings, User } from "lucide-react";
+import { HelpCircle, Settings, User } from "lucide-react";
+import { LogoutButton } from "@/features/auth/components/logout-button";
 export default function SidebarProfile() {
   return (
     <DropdownMenu>
@@ -35,10 +36,7 @@ export default function SidebarProfile() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-600">
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
+        <LogoutButton />
       </DropdownMenuContent>
     </DropdownMenu>
   )

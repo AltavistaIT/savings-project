@@ -1,7 +1,9 @@
-import { GetConfigResponse } from "@/api";
+import { GetConfigResponse } from "@/types/internal-api/models";
 
 interface LSObjectsMap {
   config: Required<GetConfigResponse>;
+  selectedMonth: number;
+  selectedYear: number;
 }
 
 export class LocalStorageService {

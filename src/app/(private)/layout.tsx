@@ -1,8 +1,17 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import MainNavbar from "@/components/navbars/main-navbar";
 import MainSidebar from "@/components/sidebars/main-sidebar";
+import DateSelector from "@/components/selectors/date-selector";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+export default async function MainLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth()
+
+  if (!session) {
+    redirect("/login")
+  }
+
   return (
     <>
       <SidebarProvider defaultOpen={true}>
@@ -12,6 +21,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <MainNavbar />
           </div>
           <div className="py-20 flex justify-center">
+            <DateSelector />
             {children}
           </div>
         </div>

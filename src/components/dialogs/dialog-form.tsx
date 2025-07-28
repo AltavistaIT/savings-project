@@ -22,7 +22,7 @@ import {
 import * as z from "zod";
 import { DefaultValues, Path, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDialogFormStore } from "@/hooks/store/dialog-form-store";
+import { useDialogFormStore } from "@/stores/dialog-form-store";
 import { useEffect } from "react";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";

@@ -3,71 +3,40 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useEffect, useState } from "react";
-import { LocalStorageService } from "@/services/local-storage-service";
-import { useTableStore } from "@/hooks/store/table-store";
-import { MONTH_NAMES } from "@/domain/constants";
-
-interface MonthOption {
-  name: string,
-  value: number
-}
+import { useEffect } from "react";
+import { useTableStore } from "@/features/tables/stores/table-store";
+import { useDateSelectorStore } from "@/stores/date-selector-store";
 
 export default function DateSelector() {
-  const [months, setMonths] = useState<MonthOption[]>([])
-  const [years, setYears] = useState<number[]>([])
-  const [selectedMonth, setSelectedMonth] = useState<number>()
-  const [selectedYear, setSelectedYear] = useState<number>()
+  const {
+    selectedMonth,
+    selectedYear,
+    availableMonths,
+    availableYears,
+    setSelectedMonth,
+    setSelectedYear,
+  } = useDateSelectorStore();
 
-  const { setMonthYear } = useTableStore()
-
-  useEffect(() => {
-    const config = LocalStorageService.getItem("config")
-    if (!config || !config.month_years) {
-      return
-    }
-    const { months, years } = config.month_years
-
-    if (!months || !years) {
-      return
-    }
-
-    const parsedMonths: MonthOption[] = months.map((month) => ({
-      name: MONTH_NAMES[month - 1],
-      value: month
-    }))
-    setMonths(parsedMonths)
-    setYears(years)
-
-    const now = new Date()
-    const currentMonth = now.getMonth() + 1
-    const currentYear = now.getFullYear()
-
-    const validMonth = months.includes(currentMonth)
-    const validYear = years.includes(currentYear)
-
-    setSelectedMonth(validMonth ? currentMonth : parsedMonths[0].value)
-    setSelectedYear(validYear ? currentYear : years[0])
-  }, [])
+  const { setTableMonthYear } = useTableStore();
 
   useEffect(() => {
     if (selectedMonth && selectedYear) {
-      const monthYear = `${selectedYear}-${selectedMonth < 10 ? `0${selectedMonth}` : selectedMonth}`
-      setMonthYear(monthYear)
+      const monthYear = `${selectedYear}-${selectedMonth < 10 ? `0${selectedMonth}` : selectedMonth}`;
+      setTableMonthYear(monthYear);
     }
-  }, [selectedMonth, selectedYear])
+  }, [selectedMonth, selectedYear, setTableMonthYear]);
 
   const handlePrevMonth = () => {
-    const prevMonth = selectedMonth && selectedMonth > 1 ? selectedMonth - 1 : 12
-    setSelectedMonth(prevMonth)
-    if (prevMonth === 12) setSelectedYear(selectedYear! - 1)
-  }
+    const prevMonth = selectedMonth > 1 ? selectedMonth - 1 : 12;
+    setSelectedMonth(prevMonth);
+    if (prevMonth === 12) setSelectedYear(selectedYear - 1);
+  };
 
   const handleNextMonth = () => {
-    const nextMonth = selectedMonth && selectedMonth < 12 ? selectedMonth + 1 : 1
-    setSelectedMonth(nextMonth)
-    if (nextMonth === 1) setSelectedYear(selectedYear! + 1)
-  }
+    const nextMonth = selectedMonth < 12 ? selectedMonth + 1 : 1;
+    setSelectedMonth(nextMonth);
+    if (nextMonth === 1) setSelectedYear(selectedYear + 1);
+  };
 
   return (
     <div className="flex items-center space-x-4">
@@ -80,7 +49,7 @@ export default function DateSelector() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {months.map((month, index) => (
+            {availableMonths.map((month, index) => (
               <SelectItem key={index} value={String(month.value)}>
                 {month.name}
               </SelectItem>
@@ -92,7 +61,7 @@ export default function DateSelector() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {years.map((y) => (
+            {availableYears.map((y) => (
               <SelectItem key={y} value={String(y)}>
                 {y}
               </SelectItem>
@@ -104,5 +73,5 @@ export default function DateSelector() {
         <ChevronRight className="h-5 w-5" />
       </Button>
     </div>
-  )
+  );
 }

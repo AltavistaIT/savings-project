@@ -3,6 +3,8 @@ import { create } from "zustand";
 import { MappedTransactions } from "../types";
 import { getTable } from "@/features/tables/actions/get-table";
 
+// TODO: ELIMINAR
+
 interface TableState {
   monthYear: string;
   tableTypeId: number;

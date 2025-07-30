@@ -5,6 +5,7 @@ import { ChevronDown, ChevronRight, Home, LucideIcon, PieChart } from "lucide-re
 import { useState } from "react";
 import { motion } from "framer-motion";
 import SidebarProfile from "@/components/sidebars/sidebar-profile";
+import { routes } from "@/lib/routes";
 
 
 interface SubItem {
@@ -26,27 +27,27 @@ interface MenuGroup {
 
 const items: MenuGroup[] = [
   {
-    label: "Sección Principal",
+    label: "Reports",
     items: [
       {
-        title: "Dashboard",
+        title: "Overview",
         icon: Home,
-        href: "/"
+        href: routes.private.reports.overview
       },
       {
         title: "Ingresos",
         icon: PieChart,
-        href: "/invoices"
+        href: routes.private.reports.invoices
       },
       {
         title: "Gastos",
         icon: PieChart,
-        href: "/expenses"
+        href: routes.private.reports.expenses
       },
       {
         title: "Ahorros e Inversiones",
         icon: PieChart,
-        href: "/savings"
+        href: routes.private.reports.savings
       }
     ]
   },

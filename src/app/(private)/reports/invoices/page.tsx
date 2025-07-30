@@ -1,9 +1,9 @@
 import { InvoicesPage } from "@/views/tables/invoices"
 
-const Invoices = () => {
+const ReportsInvoices = () => {
   return (
     <InvoicesPage />
   )
 }
 
-export default Invoices
+export default ReportsInvoices

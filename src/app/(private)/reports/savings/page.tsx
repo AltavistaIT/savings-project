@@ -1,9 +1,9 @@
 import { SavingsPage } from "@/views/tables/savings"
 
-const Savings = () => {
+const ReportsSavings = () => {
   return (
     <SavingsPage />
   )
 }
 
-export default Savings
+export default ReportsSavings

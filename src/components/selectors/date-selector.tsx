@@ -3,8 +3,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useEffect } from "react";
-import { useTableStore } from "@/features/tables/stores/table-store";
 import { useDateSelectorStore } from "@/stores/date-selector-store";
 
 export default function DateSelector() {
@@ -16,15 +14,6 @@ export default function DateSelector() {
     setSelectedMonth,
     setSelectedYear,
   } = useDateSelectorStore();
-
-  const { setTableMonthYear } = useTableStore();
-
-  useEffect(() => {
-    if (selectedMonth && selectedYear) {
-      const monthYear = `${selectedYear}-${selectedMonth < 10 ? `0${selectedMonth}` : selectedMonth}`;
-      setTableMonthYear(monthYear);
-    }
-  }, [selectedMonth, selectedYear, setTableMonthYear]);
 
   const handlePrevMonth = () => {
     const prevMonth = selectedMonth > 1 ? selectedMonth - 1 : 12;

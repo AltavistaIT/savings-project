@@ -19,5 +19,24 @@ export async function getTable(monthYear: string, typeId: number) {
     },
   });
   console.log("getTable", response);
-  return response;
+
+  if (!response || !response.success) {
+    return;
+  }
+
+  const { table, transactions } = response.data;
+
+  let amount = 0;
+  const mappedTransactions = transactions.map((tx) => {
+    amount += tx.amount;
+    return { ...tx };
+  });
+  table.amount = amount;
+
+  const finalTransactions = mappedTransactions.map((tx) => ({
+    ...tx,
+    percentage: amount > 0 ? (tx.amount / amount) * 100 : 0,
+  }));
+
+  return { table, transactions: finalTransactions };
 }

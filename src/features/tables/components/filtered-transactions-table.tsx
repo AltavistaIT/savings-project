@@ -1,12 +1,11 @@
 "use client";
-
 import { GenericTransactionsTable } from "./generic-transactions-table";
-import { useTableStore } from "@/features/tables/stores/table-store";
-import { useEffect } from "react";
 import { TABLE_TYPES } from "@/config/constants";
-import { DialogForm } from "../../../components/dialogs/dialog-form";
 import useCreateTransaction from "@/features/tables/hooks/use-create-transaction";
 import { Column } from "../types";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTableData } from "../hooks/use-table-data";
+import { useDateSelectorStore } from "@/stores/date-selector-store";
 
 const columns: Column[] = [
   {
@@ -37,17 +36,30 @@ interface FilteredTransactionsTableProps {
 }
 
 export default function FilteredTransactionsTable({ tableType }: FilteredTransactionsTableProps) {
-  const { table, transactions, setTypeId } = useTableStore()
-  const { openDialogForm } = useCreateTransaction()
+  const { selectedMonth, selectedYear } = useDateSelectorStore();
 
-  useEffect(() => {
-    setTypeId(tableType)
-  }, [tableType])
+  const monthYear =
+    selectedMonth && selectedYear
+      ? `${selectedYear}-${selectedMonth.toString().padStart(2, "0")}`
+      : "";
+
+  const { table, transactions, refetch } = useTableData(monthYear, tableType);
+
+  const { openDialogForm } = useCreateTransaction({
+    monthYear,
+    tableTypeId: tableType,
+    tableId: table.id,
+    onTransactionCreated: refetch,
+  });
 
   return (
     <>
-      <GenericTransactionsTable title={TABLE_TYPES[tableType]} columns={columns} transactions={transactions} table={table!} handleCreateTransaction={openDialogForm} />
-      <DialogForm />
+      <Card>
+        <CardHeader>
+          <CardTitle>{TABLE_TYPES[tableType]}</CardTitle>
+        </CardHeader>
+        <GenericTransactionsTable tableTypeId={tableType} columns={columns} table={table} transactions={transactions} handleCreateTransaction={openDialogForm} refetchTable={refetch} />
+      </Card>
     </>
   );
 }

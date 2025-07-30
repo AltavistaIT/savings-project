@@ -9,20 +9,27 @@ import { MoreHorizontal } from "lucide-react";
 import { MappedTransactions } from "../types";
 import useUpdateTransaction from "@/features/tables/hooks/use-update-transaction";
 import { toast } from "sonner";
-import { useTableStore } from "@/features/tables/stores/table-store";
 import { deleteTransaction } from "@/features/tables/actions/delete-transaction";
+import { TABLE_TYPES } from "@/config/constants";
 
 type RowTxActionsMenuProps = {
   rowData: MappedTransactions;
+  tableTypeId: TABLE_TYPES;
+  refetchTable: () => Promise<void>;
 };
 
 export function RowTxActionsMenu({
   rowData,
+  tableTypeId,
+  refetchTable
 }: RowTxActionsMenuProps) {
-  const { openDialogForm } = useUpdateTransaction(rowData);
-  const { fetchTable } = useTableStore()
+  const { openDialogForm } = useUpdateTransaction({
+    rowData,
+    tableTypeId,
+    refetchTable
+  });
 
-  const handleEditOpen = () => {
+  const handleEditTx = () => {
     openDialogForm();
   };
 
@@ -34,7 +41,7 @@ export function RowTxActionsMenu({
     }
 
     toast.success("Transaction deleted successfully");
-    await fetchTable();
+    await refetchTable();
   }
 
   return (
@@ -47,7 +54,7 @@ export function RowTxActionsMenu({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={() => handleEditOpen()}>
+          <DropdownMenuItem onSelect={() => handleEditTx()}>
             Edit
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => handleDeleteTx()}>Delete</DropdownMenuItem>

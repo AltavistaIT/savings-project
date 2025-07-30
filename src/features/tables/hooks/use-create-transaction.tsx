@@ -1,17 +1,22 @@
 import { LocalStorageService } from "@/services/local-storage-service";
-import { useTableStore } from "@/features/tables/stores/table-store";
 import { FormField, useDialogFormStore } from "@/stores/dialog-form-store";
 import { z } from "zod";
 import { toast } from "sonner";
 import { createTable } from "@/features/tables/actions/create-table";
 import { createTransaction } from "@/features/tables/actions/create-transaction";
 
+interface UseCreateTransactionParams {
+  monthYear: string;
+  tableTypeId: number;
+  tableId?: number;
+  onTransactionCreated: () => Promise<void>;
+}
+
 /**
  * Creates a new transaction based on the form data and the table type selected.
  * If the table doesn't exist, it creates a new one.
  */
-export default function useCreateTransaction() {
-  const { table, tableTypeId, monthYear, fetchTable } = useTableStore();
+export default function useCreateTransaction({ monthYear, tableTypeId, tableId, onTransactionCreated }: UseCreateTransactionParams) {
   const { openDialog, closeDialog } = useDialogFormStore.getState();
 
   /**
@@ -44,7 +49,7 @@ export default function useCreateTransaction() {
         return;
       }
 
-      await fetchTable();
+      await onTransactionCreated();
       toast.success("Transaction created successfully");
       closeDialog();
     } catch (error) {
@@ -135,7 +140,7 @@ export default function useCreateTransaction() {
           type_id: String(txTypes[0].value),
           amount: "1",
           currency_id: String(currencies[0].value),
-          table_id: table?.id,
+          table_id: tableId,
         },
       },
       handleCreateTransaction

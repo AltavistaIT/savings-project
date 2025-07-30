@@ -47,6 +47,7 @@ export function DialogForm<T extends Record<string, any>>() {
   const form = useForm<T>({
     resolver: zodResolver(schema) as any,
     defaultValues: formConfig.initialValues as DefaultValues<T>,
+    mode: "onChange"
   })
 
   useEffect(() => {
@@ -113,8 +114,6 @@ export function DialogForm<T extends Record<string, any>>() {
                               mode="single"
                               selected={formField.value}
                               onSelect={formField.onChange}
-                              initialFocus
-
                             />
                           </PopoverContent>
                         </Popover>
@@ -129,8 +128,8 @@ export function DialogForm<T extends Record<string, any>>() {
             ))}
 
             <DialogFooter>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? "Saving..." : "Save changes"}
+              <Button type="submit" disabled={!form.formState.isDirty || form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? "Saving..." : "Save"}
               </Button>
             </DialogFooter>
           </form>

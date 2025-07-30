@@ -13,6 +13,7 @@ import { getConfig } from "@/actions/get-config";
 import { LocalStorageService } from "@/services/local-storage-service";
 import { useState } from "react";
 import Link from "next/link";
+import { routes } from "@/lib/routes";
 
 const loginSchema = z.object({
   email: z.string().email("Correo inválido"),
@@ -45,7 +46,7 @@ export const LoginForm = () => {
     const config = await getConfig();
 
     LocalStorageService.setItem("config", config!.data);
-    redirect("/");
+    redirect(routes.private.reports.overview);
   };
 
   return (

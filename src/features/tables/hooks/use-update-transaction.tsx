@@ -1,25 +1,34 @@
 import { LocalStorageService } from "@/services/local-storage-service";
 import { FormField, useDialogFormStore } from "../../../stores/dialog-form-store";
-import { useTableStore } from "../stores/table-store";
 import { z } from "zod";
-import { MappedTransactions } from "@/features/tables/components/types";
 import { toast } from "sonner";
 import { updateTransaction } from "@/features/tables/actions/update-transaction";
+import { MappedTransactions } from "../types";
+import { normalizeDate } from "@/lib/normalize-date";
 
-export default function useUpdateTransaction(rowData: MappedTransactions) {
+interface UseUpdateTransactionParams {
+  rowData: MappedTransactions;
+  tableTypeId: number;
+  refetchTable: () => Promise<void>;
+}
+
+export default function useUpdateTransaction({
+  rowData,
+  tableTypeId,
+  refetchTable
+}: UseUpdateTransactionParams) {
   const { openDialog, closeDialog } = useDialogFormStore();
-  const { tableTypeId, fetchTable } = useTableStore();
 
   const handleUpdateTransaction = async (payload: Record<string, any>) => {
     const response = await updateTransaction({
       ...payload, transactionId: String(rowData.id)
     })
 
-    if (!response || response.success) {
+    if (!response || !response.success) {
       toast.error("An unexpected error occurred. Please try again.");
       return
     }
-    await fetchTable();
+    await refetchTable();
     toast.success("Transaction updated successfully");
     closeDialog();
   };
@@ -77,9 +86,9 @@ export default function useUpdateTransaction(rowData: MappedTransactions) {
       type: String(rowData.type_id) || "",
       description: rowData.description || "",
       amount: String(rowData.amount) || 0,
-      date: rowData.date || "",
+      date: normalizeDate(rowData.date)
     };
-
+    console.log("transactionDefaultValues", transactionDefaultValues);
     openDialog({
       title: "Update Transaction",
       fields: transactionFields,

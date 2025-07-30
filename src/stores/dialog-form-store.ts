@@ -16,7 +16,7 @@ interface DialogFormState {
     title: string;
     description?: string;
     fields: FormField[];
-    initialValues: Record<string, string | number | undefined>;
+    initialValues: Record<string, any>;
   };
   handleSubmit?: (data: Record<string, any>) => Promise<void>;
   openDialog: (

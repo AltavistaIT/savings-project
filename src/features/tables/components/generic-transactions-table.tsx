@@ -29,7 +29,6 @@ export const GenericTransactionsTable = ({ tableTypeId, columns, transactions, t
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead></TableHead>
             {columns.map((column, index) => (
               <TableHead key={index}>{column.header}</TableHead>
             ))}
@@ -48,9 +47,6 @@ export const GenericTransactionsTable = ({ tableTypeId, columns, transactions, t
               <>
                 {transactions.map((row, rowIndex) => (
                   <TableRow key={rowIndex}>
-                    <TableCell>
-                      <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
-                    </TableCell>
                     {columns.map((column, columnIndex) => (
                       <TableCell key={columnIndex}>
                         {column.accessor(row)}
@@ -63,7 +59,7 @@ export const GenericTransactionsTable = ({ tableTypeId, columns, transactions, t
                 ))}
 
                 <TableRow className="font-bold">
-                  <TableCell>Totales</TableCell>
+                  <TableCell>Totals</TableCell>
                   <TableCell className="text-right">{table?.amount}</TableCell>
                 </TableRow>
               </>

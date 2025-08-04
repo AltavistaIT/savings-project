@@ -6,28 +6,30 @@ import { Column } from "../types";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTableData } from "../hooks/use-table-data";
 import { useDateSelectorStore } from "@/stores/date-selector-store";
+import { getTxType } from "@/lib/get-tx-type";
 
 const columns: Column[] = [
   {
-    header: "Category",
-    accessor: (row) => row.type_id,
-  },
-  {
     header: "Description",
     accessor: (row) => row.description,
-  },
-  {
-    header: "Percentage",
-    accessor: (row) => `${row.percentage.toFixed(2)}%`,
   },
   {
     header: "Amount",
     accessor: (row) => `${row.amount?.toFixed(2)}`,
   },
   {
+    header: "Percentage",
+    accessor: (row) => `${row.percentage.toFixed(2)}%`,
+  },
+  {
     header: "Date",
     accessor: (row) =>
       row.date ? new Date(row.date).toLocaleDateString("en-US", { timeZone: "UTC" }) : "-",
+  },
+  {
+    header: "Category",
+    accessor: (row) =>
+      row.type_id && getTxType(row.type_id)?.description,
   },
 ];
 

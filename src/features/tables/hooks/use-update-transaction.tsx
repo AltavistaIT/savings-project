@@ -48,7 +48,7 @@ export default function useUpdateTransaction({
 
     const transactionFields: FormField[] = [
       {
-        name: "type",
+        name: "type_id",
         label: "Tipo",
         type: "select",
         options: txTypes,

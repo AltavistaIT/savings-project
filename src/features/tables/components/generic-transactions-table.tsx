@@ -6,8 +6,8 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GripVertical, Plus } from "lucide-react";
+import { CardContent } from "@/components/ui/card";
+import { Plus } from "lucide-react";
 import { RowTxActionsMenu } from "./row-tx-actions-menu";
 import { Button } from "../../../components/ui/button";
 import { Column, MappedTransactions } from "../types";

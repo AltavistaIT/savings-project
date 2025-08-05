@@ -19,7 +19,7 @@ export default function useUpdateTransaction({
 }: UseUpdateTransactionParams) {
   const { openDialog, closeDialog } = useDialogFormStore();
 
-  const handleUpdateTransaction = async (payload: Record<string, any>) => {
+  const handleUpdateTransaction = async (payload: Record<string, unknown>) => {
     const response = await updateTransaction({
       ...payload, transactionId: String(rowData.id)
     })

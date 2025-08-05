@@ -26,7 +26,7 @@ export default function useCreateTransaction({ monthYear, tableTypeId, tableId, 
    * 
    * @param {Record<string, any>} data - The transaction data containing details such as type_id and amount.
    */
-  const handleCreateTransaction = async (data: Record<string, any>) => {
+  const handleCreateTransaction = async (data: Record<string, unknown>) => {
     try {
       if (!data.table_id) {
         const response = await createTable(monthYear, tableTypeId);

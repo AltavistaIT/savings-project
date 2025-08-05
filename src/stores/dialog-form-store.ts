@@ -16,12 +16,12 @@ interface DialogFormState {
     title: string;
     description?: string;
     fields: FormField[];
-    initialValues: Record<string, any>;
+    initialValues: Record<string, unknown>;
   };
-  handleSubmit?: (data: Record<string, any>) => Promise<void>;
+  handleSubmit?: (data: Record<string, unknown>) => Promise<void>;
   openDialog: (
     config: DialogFormState["formConfig"],
-    submitHandler: (data: Record<string, any>) => Promise<void>
+    submitHandler: (data: Record<string, unknown>) => Promise<void>
   ) => void;
   closeDialog: () => void;
 }

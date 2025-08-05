@@ -9,11 +9,12 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+export default [
+  // Bloque para ignorar archivos
   {
-    ignores: ["src/types/internal-api/**/*"]
+    ignores: ["src/types/internal-api/**"],
   },
+
+  // Configuración principal heredada
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
-
-export default eslintConfig;

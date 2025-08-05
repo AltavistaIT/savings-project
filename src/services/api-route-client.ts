@@ -12,6 +12,7 @@ import {
 } from "@/types/internal-api/models";
 import { DeepRequired } from "@/types/deep-required";
 import { HTTP_METHOD } from "next/dist/server/web/http";
+import { env } from "@/config/env";
 
 interface ApiRoutesMap {
   login: {
@@ -100,9 +101,11 @@ const apiRoutesMap: Record<
 };
 
 export class ApiRouteClient {
-  private baseUrl = "http://localhost:8081/api";
+  private baseUrl: string;
 
-  constructor(private token?: string) {}
+  constructor(private token?: string) {
+    this.baseUrl = env.INTERNAL_API_URL + "/api";
+  }
 
   async fetch<K extends keyof ApiRoutesMap>(
     service: K,
@@ -126,7 +129,7 @@ export class ApiRouteClient {
     );
     const queryString = this.buildQueryString(params.queryParams);
     const url = `${this.baseUrl}${rawPath}${queryString}`;
-
+    console.log("url", url);
     const headers = new Headers({
       "Content-Type": "application/json",
       ...(params.options?.headers ?? {}),

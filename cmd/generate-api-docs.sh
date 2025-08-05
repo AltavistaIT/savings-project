@@ -8,11 +8,11 @@ npx openapi-generator-cli generate -i http://localhost:8081/docs -g typescript-f
 echo "Finished Internal API types generation"
 
 # Clean result
-echo "Starting cleanup"
-cd ./src/types/internal-api
+# echo "Starting cleanup"
+# cd ./src/types/internal-api
 
-find . -mindepth 1 -maxdepth 1 ! -name "models" -exec rm -rf {} +
+# find . -mindepth 1 -maxdepth 1 ! -name "models" -exec rm -rf {} +
 
-cd - > /dev/null
+# cd - > /dev/null
 
-echo "Finished cleanup"
+# echo "Finished cleanup"

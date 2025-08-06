@@ -6,11 +6,15 @@ import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { DialogForm } from "@/components/dialogs/dialog-form";
 
-export default async function MainLayout({ children }: { children: React.ReactNode }) {
+export default async function PrivateLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
 
   if (!session) {
     redirect(routes.public.login)
+  }
+
+  if (session.expired) {
+    redirect(routes.public.login + "?expired=true")
   }
 
   return (

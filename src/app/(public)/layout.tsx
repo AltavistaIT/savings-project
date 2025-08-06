@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
 
-  if (session) {
+  if (session && !session.expired) {
     redirect(routes.private.reports.overview);
   }
 

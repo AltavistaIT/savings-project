@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { login } from "./features/auth/actions/login";
+import { decodeJwt } from "jose";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -13,26 +14,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const res = await login({
-            email: credentials?.email as string,
-            password: credentials?.password as string,
-          });
-
-          if (!res) {
+          const { email, password } = credentials;
+          if (!email || !password) {
             return null;
           }
 
-          if (res.success && res.data) {
-            const { email, token, name, id } = res.data;
-            return {
-              id: String(id),
-              email,
-              name,
-              accessToken: token,
-            };
+          const res = await login({
+            email: String(email),
+            password: String(password),
+          });
+
+          if (!res?.success || !res?.data) {
+            return null;
           }
 
-          return null;
+          const { email: userEmail, token, name, id } = res.data;
+          const { exp } = decodeJwt(token);
+
+          return {
+            id: String(id),
+            email: userEmail,
+            name,
+            accessToken: token,
+            accessTokenExpires: exp,
+          };
         } catch (error) {
           console.error(error);
           return null;
@@ -49,18 +54,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.accessToken;
-        token.id = user.id;
+        return {
+          ...token,
+          id: user.id,
+          accessToken: user.accessToken,
+          accessTokenExpires: user.accessTokenExpires,
+        };
       }
+
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken as string;
-      session.user = {
-        ...session.user,
-        id: token.id as string,
+      const now = Math.floor(Date.now() / 1000);
+      const exp = Number(token.accessTokenExpires ?? 0);
+      const isExpired = exp < now;
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string,
+        },
+        accessToken: token.accessToken as string,
+        expired: isExpired,
+        expires: new Date(
+          Number(token.accessTokenExpires) * 1000
+        ).toISOString(),
       };
-      return session;
     },
   },
 });

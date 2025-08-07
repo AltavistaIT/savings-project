@@ -4,6 +4,8 @@ import {
   CreateTableDto,
   CreateTransactionDto,
   LoginDto,
+  RegisterDto,
+  SuccessResponse,
   TablesGet200Response,
   TablesPost200Response,
   TransactionsIdDelete200Response,
@@ -20,6 +22,12 @@ interface ApiRoutesMap {
     pathVariables: null;
     queryParams: null;
     response: AuthLoginPost200Response;
+  };
+  register: {
+    body: RegisterDto;
+    pathVariables: null;
+    queryParams: null;
+    response: SuccessResponse;
   };
   getConfig: {
     body: null;
@@ -72,6 +80,10 @@ const apiRoutesMap: Record<
 > = {
   login: {
     path: "/auth/login",
+    method: "POST",
+  },
+  register: {
+    path: "/auth/register",
     method: "POST",
   },
   getConfig: {

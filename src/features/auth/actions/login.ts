@@ -3,7 +3,7 @@
 import { ApiRouteClient } from "@/services/api-route-client";
 import { LoginDto } from "@/types/internal-api/models";
 
-export async function login(payload: LoginDto) {
+export async function loginAction(payload: LoginDto) {
   const api = new ApiRouteClient();
 
   const response = await api.fetch("login", {

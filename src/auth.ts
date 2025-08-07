@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { login } from "./features/auth/actions/login";
+import { loginAction } from "./features/auth/actions/login";
 import { decodeJwt } from "jose";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -19,7 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null;
           }
 
-          const res = await login({
+          const res = await loginAction({
             email: String(email),
             password: String(password),
           });

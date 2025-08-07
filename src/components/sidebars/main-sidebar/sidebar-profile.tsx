@@ -1,20 +1,34 @@
+"use client"
+
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HelpCircle, Settings, User } from "lucide-react";
 import { LogoutButton } from "@/features/auth/components/logout-button";
+import { useSession } from "next-auth/react";
 export default function SidebarProfile() {
+  const { data } = useSession();
+  const user = data?.user;
+
+  const initials = user?.name
+    ? user.name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+    : "US";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User avatar" />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarFallback> {initials}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-start text-left">
-            <span className="text-sm font-medium">John Doe</span>
-            <span className="text-xs text-muted-foreground">john@example.com</span>
+            <span className="text-sm font-medium">{user?.name || "User"}</span>
+            <span className="text-xs text-muted-foreground">{user?.email || "No email"}</span>
           </div>
         </Button>
       </DropdownMenuTrigger>

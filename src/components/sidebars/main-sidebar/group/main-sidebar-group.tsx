@@ -2,7 +2,7 @@
 
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu } from "@/components/ui/sidebar";
 import { useState } from "react";
-import { Home, LucideIcon, PieChart } from "lucide-react";
+import { Home, PieChart } from "lucide-react";
 import { MenuGroup } from "./types";
 import { routes } from "@/lib/routes";
 import MainSidebarMenuItem from "../items/main-sidebar-menu-item";

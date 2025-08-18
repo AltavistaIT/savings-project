@@ -33,7 +33,6 @@ export const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
-    console.log("Register data", data);
 
     const response = await registerAction(data);
     if (!response?.success) {

@@ -6,7 +6,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
-import { MappedTransactions } from "../types";
 import useUpdateTransaction, { UseUpdateTransactionParams } from "@/features/tables/hooks/use-update-transaction";
 import { toast } from "sonner";
 import { deleteTransaction } from "@/features/tables/actions/delete-transaction";

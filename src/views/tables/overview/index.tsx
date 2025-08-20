@@ -7,7 +7,8 @@ export const ReportsMainPage = () => {
       <div className="grid grid-cols-1 gap-4">
         <FilteredTransactionsTable tableType={TABLE_TYPES.Invoices} />
         <FilteredTransactionsTable tableType={TABLE_TYPES.Expenses} />
-        {/* <FilteredTransactionsTable tableType={TABLE_TYPES.Savings} /> */}
+        <FilteredTransactionsTable tableType={TABLE_TYPES.Savings} />
+        <p>Balance: </p>
       </div>
     </>
   );

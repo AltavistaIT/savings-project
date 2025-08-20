@@ -5,23 +5,26 @@ import { toast } from "sonner";
 import { updateTransaction } from "@/features/tables/actions/update-transaction";
 import { MappedTransactions } from "../types";
 import { normalizeDate } from "@/lib/normalize-date";
+import { TABLE_TYPES } from "@/config/constants";
 
-interface UseUpdateTransactionParams {
+export interface UseUpdateTransactionParams {
   rowData: MappedTransactions;
-  tableTypeId: number;
+  tableTypeId: TABLE_TYPES;
+  tableId: number;
   refetchTable: () => Promise<void>;
 }
 
 export default function useUpdateTransaction({
   rowData,
   tableTypeId,
+  tableId,
   refetchTable
 }: UseUpdateTransactionParams) {
   const { openDialog, closeDialog } = useDialogFormStore();
 
   const handleUpdateTransaction = async (payload: Record<string, unknown>) => {
     const response = await updateTransaction({
-      ...payload, transactionId: String(rowData.id)
+      ...payload, table_id: tableId, transactionId: String(rowData.id)
     })
 
     if (!response || !response.success) {

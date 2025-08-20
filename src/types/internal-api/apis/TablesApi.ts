@@ -37,10 +37,6 @@ export interface TablesGetRequest {
     monthYear: string;
 }
 
-export interface TablesIdGetRequest {
-    id: number;
-}
-
 export interface TablesPostRequest {
     createTableDto: CreateTableDto;
 }
@@ -106,39 +102,6 @@ export class TablesApi extends runtime.BaseAPI {
      */
     async tablesGet(requestParameters: TablesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TablesGet200Response> {
         const response = await this.tablesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get table by id
-     */
-    async tablesIdGetRaw(requestParameters: TablesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TablesGet200Response>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling tablesIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/tables/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TablesGet200ResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Get table by id
-     */
-    async tablesIdGet(requestParameters: TablesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TablesGet200Response> {
-        const response = await this.tablesIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

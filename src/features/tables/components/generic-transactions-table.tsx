@@ -53,7 +53,7 @@ export const GenericTransactionsTable = ({ tableTypeId, columns, transactions, t
                       </TableCell>
                     ))}
                     <TableCell className="text-right">
-                      <RowTxActionsMenu rowData={row} tableTypeId={tableTypeId} refetchTable={refetchTable} />
+                      <RowTxActionsMenu rowData={row} tableTypeId={tableTypeId} tableId={table?.id || 0} refetchTable={refetchTable} />
                     </TableCell>
                   </TableRow>
                 ))}

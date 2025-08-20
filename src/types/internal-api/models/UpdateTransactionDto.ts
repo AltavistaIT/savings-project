@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface UpdateTransactionDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdateTransactionDto
+     */
+    id?: number;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateTransactionDto
      */
@@ -43,6 +49,18 @@ export interface UpdateTransactionDto {
      * @memberof UpdateTransactionDto
      */
     date?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTransactionDto
+     */
+    table_id?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTransactionDto
+     */
+    user_id?: number;
 }
 
 /**
@@ -62,10 +80,13 @@ export function UpdateTransactionDtoFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
+        'id': json['id'] == null ? undefined : json['id'],
         'description': json['description'] == null ? undefined : json['description'],
         'type_id': json['type_id'] == null ? undefined : json['type_id'],
         'amount': json['amount'] == null ? undefined : json['amount'],
         'date': json['date'] == null ? undefined : json['date'],
+        'table_id': json['table_id'] == null ? undefined : json['table_id'],
+        'user_id': json['user_id'] == null ? undefined : json['user_id'],
     };
 }
 
@@ -80,10 +101,13 @@ export function UpdateTransactionDtoToJSONTyped(value?: UpdateTransactionDto | n
 
     return {
         
+        'id': value['id'],
         'description': value['description'],
         'type_id': value['type_id'],
         'amount': value['amount'],
         'date': value['date'],
+        'table_id': value['table_id'],
+        'user_id': value['user_id'],
     };
 }
 

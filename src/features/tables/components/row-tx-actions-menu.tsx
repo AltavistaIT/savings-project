@@ -7,25 +7,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { MappedTransactions } from "../types";
-import useUpdateTransaction from "@/features/tables/hooks/use-update-transaction";
+import useUpdateTransaction, { UseUpdateTransactionParams } from "@/features/tables/hooks/use-update-transaction";
 import { toast } from "sonner";
 import { deleteTransaction } from "@/features/tables/actions/delete-transaction";
-import { TABLE_TYPES } from "@/config/constants";
 
-type RowTxActionsMenuProps = {
-  rowData: MappedTransactions;
-  tableTypeId: TABLE_TYPES;
-  refetchTable: () => Promise<void>;
-};
+type RowTxActionsMenuProps = UseUpdateTransactionParams
 
 export function RowTxActionsMenu({
   rowData,
   tableTypeId,
+  tableId,
   refetchTable
 }: RowTxActionsMenuProps) {
   const { openDialogForm } = useUpdateTransaction({
     rowData,
     tableTypeId,
+    tableId,
     refetchTable
   });
 
